@@ -1,0 +1,22 @@
+#footerContainer {
+  border-image-source: url(../../assets/ui/tile_0007.png);
+  border-image-slice: 14 fill;
+  border-image-width: 40px;
+  border-image-repeat: repeat;
+  image-rendering: pixelated;
+  width: 100%;
+  height: 30dvh;
+  bottom: 0;
+  position: absolute;
+  transition: bottom 0.3s ease-in-out;
+  background-size: contain;
+}
+
+#footerContainer.slide-down {
+  bottom: -30dvh;
+}
+
+#taskContainer {
+  padding: 20px;
+  text-align: center;
+}

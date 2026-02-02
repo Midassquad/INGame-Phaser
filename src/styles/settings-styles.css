@@ -1,0 +1,29 @@
+#settings-container {
+  width: 80%;
+  height: 70%;
+  background: #845405;
+  border: 2px solid #323c39;
+  position: absolute;
+  top: 50%; /* Moves the top edge to the vertical center of the parent */
+  left: 50%; /* Moves the left edge to the horizontal center of the parent */
+  translate: -50% -50%;
+  color: wheat;
+  opacity: 0; /* Initial state for fade-in */
+  transition: opacity 0.2s ease-in-out; /* Animation duration */
+
+  border-image-source: url(../../assets/ui/tile_0007_larger.png);
+  border-image-slice: 66 fill;
+  border-image-width: 20px;
+  border-image-repeat: repeat;
+  image-rendering: pixelated;
+}
+
+/* Class applied when modal is meant to be visible */
+#settings-container.fade-in {
+  opacity: 1;
+}
+
+/* Class applied when modal is meant to be closing (but still rendered) */
+#settings-container.fade-out {
+  opacity: 0;
+}

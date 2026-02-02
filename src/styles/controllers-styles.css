@@ -1,0 +1,50 @@
+#headerNav {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+
+  color: white;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#controlsContainer {
+  display: grid;
+  grid-template-areas:
+    "upControl upControl upControl"
+    "leftControl attackControl rightControl"
+    "downControl downControl downControl";
+}
+
+#controlsContainer div {
+  cursor: pointer;
+  text-align: center;
+  padding: 10px;
+}
+
+#controlsContainer .downControl {
+  grid-area: downControl;
+  padding-top: 30px;
+}
+#controlsContainer .upControl {
+  grid-area: upControl;
+  padding-bottom: 30px;
+}
+#controlsContainer .leftControl {
+  grid-area: leftControl;
+}
+#controlsContainer .rightControl {
+  grid-area: rightControl;
+}
+#controlsContainer .attackControl {
+  grid-area: attackControl;
+}

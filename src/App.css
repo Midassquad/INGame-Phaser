@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  background-color: #ff8400;
+  font-family: Arial, sans-serif;
+}
+
+#game-container {
+  background-color: #7ed2b7;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-container canvas {
+  border: 5px solid #3f3f3f;
+}
+
+#appContainer {
+  height: 100dvh;
+  background-color: pink;
+  position: relative;
+}

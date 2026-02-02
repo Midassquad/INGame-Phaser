@@ -1,0 +1,37 @@
+import Phaser from "phaser";
+import { Battle } from "./scenes/Battle";
+import { Boot } from "./scenes/Boot";
+import { Preloader } from "./scenes/Preloader";
+import { CharacterDetails } from "./scenes/CharacterDetails";
+import { Navbar } from "./scenes/Navbar";
+import { Settings } from "./scenes/Settings";
+
+const config = {
+  type: Phaser.AUTO,
+  scene: [Boot, Preloader, Battle, CharacterDetails, Settings, Navbar],
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: { x: 0, y: 0 },
+      debug: false,
+    },
+  },
+  scale: {
+    mode: Phaser.Scale.FIT,
+    width: 720,
+    height: 1280,
+    // width: window.innerWidth,
+    // height: window.innerHeight,
+    // max: {
+    //   width: 680,
+    //   height: window.innerHeight,
+    // },
+  },
+  parent: "game-container",
+};
+
+const StartGame = (parent: string) => {
+  return new Phaser.Game({ ...config, parent });
+};
+
+export default StartGame;

@@ -1,0 +1,355 @@
+{
+	"textures": [
+		{
+			"image": "rathalos_texture",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1255,
+				"h": 77
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "rathalos_hunter/idle/idle_1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 32,
+						"h": 52
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 52
+					},
+					"frame": {
+						"x": 3,
+						"y": 3,
+						"w": 32,
+						"h": 52
+					}
+				},
+				{
+					"filename": "rathalos_hunter/idle/idle_2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 32,
+						"h": 52
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 52
+					},
+					"frame": {
+						"x": 41,
+						"y": 3,
+						"w": 32,
+						"h": 52
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_6.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 45,
+						"h": 54
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 45,
+						"h": 54
+					},
+					"frame": {
+						"x": 79,
+						"y": 3,
+						"w": 45,
+						"h": 54
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 56,
+						"h": 55
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 56,
+						"h": 55
+					},
+					"frame": {
+						"x": 130,
+						"y": 3,
+						"w": 56,
+						"h": 55
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 47,
+						"h": 57
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 47,
+						"h": 57
+					},
+					"frame": {
+						"x": 192,
+						"y": 3,
+						"w": 47,
+						"h": 57
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_4.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 54,
+						"h": 57
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 54,
+						"h": 57
+					},
+					"frame": {
+						"x": 245,
+						"y": 3,
+						"w": 54,
+						"h": 57
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 48,
+						"h": 57
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 48,
+						"h": 57
+					},
+					"frame": {
+						"x": 305,
+						"y": 3,
+						"w": 48,
+						"h": 57
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_7.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 47,
+						"h": 57
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 47,
+						"h": 57
+					},
+					"frame": {
+						"x": 359,
+						"y": 3,
+						"w": 47,
+						"h": 57
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_8.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 53,
+						"h": 57
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 53,
+						"h": 57
+					},
+					"frame": {
+						"x": 412,
+						"y": 3,
+						"w": 53,
+						"h": 57
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_9.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 54,
+						"h": 57
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 54,
+						"h": 57
+					},
+					"frame": {
+						"x": 471,
+						"y": 3,
+						"w": 54,
+						"h": 57
+					}
+				},
+				{
+					"filename": "rathalos_hunter/walk/walk_3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 52,
+						"h": 58
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 58
+					},
+					"frame": {
+						"x": 531,
+						"y": 3,
+						"w": 52,
+						"h": 58
+					}
+				},
+				{
+					"filename": "rathalos_hunter/slash/slash_1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 105,
+						"h": 69
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 105,
+						"h": 69
+					},
+					"frame": {
+						"x": 589,
+						"y": 3,
+						"w": 105,
+						"h": 69
+					}
+				},
+				{
+					"filename": "rathalos_hunter/slash/slash_4.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 162,
+						"h": 69
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 162,
+						"h": 69
+					},
+					"frame": {
+						"x": 700,
+						"y": 3,
+						"w": 162,
+						"h": 69
+					}
+				},
+				{
+					"filename": "rathalos_hunter/slash/slash_2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 103,
+						"h": 70
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 103,
+						"h": 70
+					},
+					"frame": {
+						"x": 868,
+						"y": 3,
+						"w": 103,
+						"h": 70
+					}
+				},
+				{
+					"filename": "rathalos_hunter/slash/slash_5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 160,
+						"h": 70
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 160,
+						"h": 70
+					},
+					"frame": {
+						"x": 977,
+						"y": 3,
+						"w": 160,
+						"h": 70
+					}
+				},
+				{
+					"filename": "rathalos_hunter/slash/slash_3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 109,
+						"h": 71
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 109,
+						"h": 71
+					},
+					"frame": {
+						"x": 1143,
+						"y": 3,
+						"w": 109,
+						"h": 71
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "http://free-tex-packer.com",
+		"version": "0.6.7"
+	}
+}

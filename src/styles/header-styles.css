@@ -1,0 +1,21 @@
+#header-container {
+  position: absolute;
+  top: 0;
+  background: #845405;
+  border: 2px solid #323c39;
+  color: wheat;
+  width: 100%;
+}
+
+#header-inner-container {
+  display: flex;
+  height: 5.5dvh;
+  justify-content: center;
+  align-items: center;
+}
+
+#header-inner-container div {
+  flex-grow: 1;
+  text-align: center;
+  cursor: pointer;
+}

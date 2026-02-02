@@ -1,0 +1,138 @@
+import { Scene } from "phaser";
+
+import INGameLogo from "../../../assets/ingame-logo.png";
+
+import heroBG from "../../../assets/hero_bg.jpg";
+
+import ghSprite from "../../../assets/sprites/golden_knight/golden_knight_texture_v2.png";
+import ghSpriteJson from "../../../assets/sprites/golden_knight/golden_knight_texture_v2.json";
+
+import skeletonSprite from "../../../assets/sprites/skeleton/skeleton_texture_v4.png";
+import skeletonSpriteJson from "../../../assets/sprites/skeleton/skeleton_texture_v4.json";
+
+import rathalosSprite from "../../../assets/sprites/rathalos_hunter/rathalos_texture_v2.png";
+import rathalosSpriteJson from "../../../assets/sprites/rathalos_hunter/rathalos_texture_v2.json";
+
+import blueBorderBrownBg from "../../../assets/ui/tile_0005.png";
+import blueBorderBlueBg from "../../../assets/ui/tile_0029.png";
+import brownBorderWhiteBg from "../../../assets/ui/tile_0000.png";
+import blueBorderWhiteBg from "../../../assets/ui/tile_0007.png";
+import blueBorderBlueBgNoDesign from "../../../assets/ui/tile_0015.png";
+
+import TEXTURE_NAMES from "../../constants/texture_names.ts";
+import {
+  SKELETON_HURT_CONFIGS,
+  SKELETON_SHOOT_CONFIGS,
+  SKELETON_WALK_CONFIGS,
+} from "../../constants/anim_configs/skeleton_anim_configs.ts";
+import {
+  GOLDEN_KNIGHT_IDLE_CONFIGS,
+  GOLDEN_KNIGHT_SLASH_CONFIGS,
+  GOLDEN_KNIGHT_WALK_CONFIGS,
+} from "../../constants/anim_configs/golden_knight_anim_configs.ts";
+import type { ANIM_CONFIG } from "../../types/anim.types.ts";
+import SCENE_NAMES from "../../constants/scene_names.ts";
+import RATHALOS_ANIM_CONFIGS from "../../constants/anim_configs/rathalos_anim_configs.ts";
+
+export class Preloader extends Scene {
+  constructor() {
+    super(SCENE_NAMES.PRELOADER);
+  }
+
+  generateAnimations(configs: ANIM_CONFIG[]) {
+    for (const config of configs) {
+      const { key, framesConfig, frameRate, repeat } = config;
+      const { sprite, prefix, suffix, start, end } = framesConfig;
+
+      this.anims.create({
+        key,
+        frames: this.anims.generateFrameNames(sprite, {
+          prefix,
+          suffix,
+          start,
+          end,
+        }),
+        frameRate,
+        repeat,
+      });
+    }
+  }
+
+  initGoldenKnightAnimations() {
+    this.generateAnimations([
+      ...GOLDEN_KNIGHT_WALK_CONFIGS,
+      ...GOLDEN_KNIGHT_SLASH_CONFIGS,
+      ...GOLDEN_KNIGHT_IDLE_CONFIGS,
+    ]);
+  }
+
+  initSkeletonAnimations() {
+    this.generateAnimations([
+      ...SKELETON_WALK_CONFIGS,
+      ...SKELETON_SHOOT_CONFIGS,
+      ...SKELETON_HURT_CONFIGS,
+    ]);
+  }
+
+  initRathalosAnimations() {
+    this.generateAnimations(RATHALOS_ANIM_CONFIGS);
+  }
+
+  init() {
+    //  We loaded this image in our Boot Scene, so we can display it here
+    // this.add.image(0, 0, "background");
+  }
+
+  preload() {
+    // //  Load the assets for the game - Replace with your own assets
+    // this.load.setPath("assets");
+    // this.load.image("logo", "logo.png");
+    // this.load.image("star", "star.png");
+    //
+    //
+    this.load.font(
+      "PressStart2P",
+      "../../../assets/fonts/PressStart2P-Regular.ttf",
+      "truetype",
+    );
+
+    this.load.font(
+      "PixelifySans",
+      "../../../assets/fonts/PixelifySans-VariableFont_wght.ttf",
+      "truetype",
+    );
+
+    this.load.image(TEXTURE_NAMES.LOGO, INGameLogo);
+    this.load.image(TEXTURE_NAMES.HERO_BG, heroBG);
+
+    this.load.image(TEXTURE_NAMES.BLUE_BORDER_BROWN_BG, blueBorderBrownBg);
+    this.load.image(TEXTURE_NAMES.BROWN_BORDER_WHITE_BG, brownBorderWhiteBg);
+    this.load.image(TEXTURE_NAMES.BLUE_BORDER_BLUE_BG, blueBorderBlueBg);
+    this.load.image(TEXTURE_NAMES.BLUE_BORDER_WHITE_BG, blueBorderWhiteBg);
+    this.load.image(
+      TEXTURE_NAMES.BLUE_BORDER_BLUE_BG_NO_DESIGN,
+      blueBorderBlueBgNoDesign,
+    );
+
+    this.load.atlas(TEXTURE_NAMES.GOLDEN_KNIGHT, ghSprite, ghSpriteJson);
+
+    this.load.atlas(TEXTURE_NAMES.SKELETON, skeletonSprite, skeletonSpriteJson);
+
+    this.load.atlas(
+      TEXTURE_NAMES.RATHALOS_HUNTER,
+      rathalosSprite,
+      rathalosSpriteJson,
+    );
+  }
+
+  create() {
+    //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
+    //  For example, you can define global animations here, so we can use them in other scenes.
+    this.initGoldenKnightAnimations();
+    this.initRathalosAnimations();
+    this.initSkeletonAnimations();
+
+    //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
+    this.scene.launch(SCENE_NAMES.NAVBAR).launch(SCENE_NAMES.BATTLE);
+  }
+}

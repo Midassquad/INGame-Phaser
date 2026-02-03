@@ -5,10 +5,12 @@ import { Preloader } from "./scenes/Preloader";
 import { CharacterDetails } from "./scenes/CharacterDetails";
 import { Navbar } from "./scenes/Navbar";
 import { Settings } from "./scenes/Settings";
+import { SplashScreen } from "./scenes/SplashScreen";
+import { LoginScreen } from "./scenes/LoginScreen";
 
 const config = {
   type: Phaser.AUTO,
-  scene: [Boot, Preloader, Battle, CharacterDetails, Settings, Navbar],
+  scene: [Boot, Preloader, SplashScreen, LoginScreen, Battle, CharacterDetails, Settings, Navbar],
   physics: {
     default: "arcade",
     arcade: {

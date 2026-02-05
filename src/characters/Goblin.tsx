@@ -1,9 +1,9 @@
-import { SKELETON_KEYS } from "../constants/anim_keys";
+import { MOBS_KEYS } from "../constants/anim_keys";
 import TEXTURE_NAMES from "../constants/texture_names";
 import type { Coordinates } from "../types/global.types";
 import Unit from "./Unit";
 
-export default class Skeleton extends Unit {
+export default class Goblin extends Unit {
   constructor(
     scene: Phaser.Scene,
     scale: number,
@@ -12,10 +12,15 @@ export default class Skeleton extends Unit {
   ) {
     super(
       scene,
-      TEXTURE_NAMES.SKELETON,
+      TEXTURE_NAMES.MOBS,
       scale,
       coords,
-      defaultAnimation ?? SKELETON_KEYS.SHOOT_LEFT,
+      defaultAnimation ?? MOBS_KEYS.GOBLIN,
+      true,
     );
+  }
+
+  configureHitAreaSize(): Phaser.Geom.Circle | void {
+    return new Phaser.Geom.Circle(192 / 2, 192 / 2, 32);
   }
 }

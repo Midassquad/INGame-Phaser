@@ -8,6 +8,7 @@ import {
 import StartGame from "./game/main";
 import { EventBus } from "./game/EventBus";
 import SCENE_NAMES from "./constants/scene_names";
+import { Client } from "@stomp/stompjs";
 
 export interface IRefPhaserGame {
   game: Phaser.Game | null;
@@ -88,6 +89,27 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
       };
     }, [currentActiveScene, ref, currentSceneInstance]);
 
+    const test = "ws://localhost:8080/gs-guide-websocket";
+
+    useEffect(() => {
+      const client = new Client({
+        brokerURL:
+          "ws://lgnccx-ip-210-57-14-5.tunnelmole.net/gs-guide-websocket",
+        onConnect: () => {
+          console.log("Connected");
+          // Subscribe to a destination
+          client.subscribe("/topic/greetings", (message) => {
+            console.log(`Received: ${message.body}`);
+          });
+        },
+      });
+      client.activate();
+
+      return () => {
+        client.deactivate();
+      };
+    }, []);
+    //
     return <div id="game-container"></div>;
   },
 );

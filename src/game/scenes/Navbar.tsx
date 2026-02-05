@@ -24,7 +24,7 @@ export class Navbar extends Scene {
 
     const outerNavContainer = this.add.container(
       columnWidth / 2,
-      (columnWidth + 50) / 2,
+      (columnWidth - 30) / 2,
     );
 
     for (let index = 0; index < navName.length; index++) {
@@ -39,7 +39,7 @@ export class Navbar extends Scene {
           TEXTURE_NAMES.BLUE_BORDER_BLUE_BG,
           0,
           (columnWidth - 20) / 2,
-          columnWidth / 2,
+          (columnWidth - 80) / 2,
           14,
           14,
           14,
@@ -87,7 +87,7 @@ export class Navbar extends Scene {
     if (nav == "Hero") {
       EventBus.emit("change-scene", SCENE_NAMES.CHARACTER_DETAILS);
     }
-    if (nav === "Quests") {
+    if (nav === "Battle") {
       EventBus.emit("change-scene", SCENE_NAMES.BATTLE);
     }
     if (nav === "Settings") {
@@ -101,12 +101,15 @@ export class Navbar extends Scene {
 
     const navItems = this.generateEachNavs([
       "Hero",
-      "Quests",
+      "Battle",
       "Map",
       "Settings",
     ]);
 
-    const navContainer = this.add.container(0, 0);
+    const navContainer = this.add.container(
+      0,
+      this.#gameH - this.#gameH * 0.12,
+    );
 
     const bg = this.add
       .nineslice(
@@ -115,7 +118,7 @@ export class Navbar extends Scene {
         TEXTURE_NAMES.BLUE_BORDER_WHITE_BG,
         0,
         this.#gameW / 2,
-        (this.#gameH * 0.18) / 2,
+        (this.#gameH * 0.12) / 2,
         14,
         14,
         14,
@@ -128,11 +131,11 @@ export class Navbar extends Scene {
 
     navContainer.add(navItems);
 
-    const gameLogo = this.add
-      .image(this.#gameW / 2, (this.#gameH * 0.32) / 2, TEXTURE_NAMES.LOGO)
-      .setScale(0.5);
-
-    navContainer.add(gameLogo);
+    // const gameLogo = this.add
+    //   .image(this.#gameW / 2, (this.#gameH * 0.32) / 2, TEXTURE_NAMES.LOGO)
+    //   .setScale(0.5);
+    //
+    // navContainer.add(gameLogo);
 
     EventBus.emit("current-scene-ready", this);
   }

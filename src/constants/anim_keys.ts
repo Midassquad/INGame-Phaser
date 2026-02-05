@@ -19,6 +19,11 @@ const RATHALOS_HUNTER_KEYS = {
   SLASH: "rathalos_slash",
 };
 
+const CATTO_KEYS = {
+  IDLE: "catto_idle",
+  JUMP: "catto_jump",
+};
+
 const SKELETON_KEYS = {
   WALK_UP: "skeleton_walk_up",
   WALK_DOWN: "skeleton_walk_down",
@@ -31,4 +36,16 @@ const SKELETON_KEYS = {
   HURT: "skeleton_hurt",
 };
 
-export { GOLDEN_KNIGHT_KEYS, RATHALOS_HUNTER_KEYS, SKELETON_KEYS };
+const MOBS_KEYS = {
+  OGRE: "ogre",
+  BUG: "bug",
+  GOBLIN: "goblin",
+};
+
+export {
+  GOLDEN_KNIGHT_KEYS,
+  RATHALOS_HUNTER_KEYS,
+  SKELETON_KEYS,
+  CATTO_KEYS,
+  MOBS_KEYS,
+};

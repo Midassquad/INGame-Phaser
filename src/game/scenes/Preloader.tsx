@@ -3,6 +3,11 @@ import { Scene } from "phaser";
 import INGameLogo from "../../../assets/ingame-logo.png";
 
 import heroBG from "../../../assets/hero_bg.jpg";
+import leftArrow from "../../../assets/left_arrow.png";
+import rightArrow from "../../../assets/right_arrow.png";
+
+import cattoSprite from "../../../assets/sprites/catto/catto_texture_v2.png";
+import cattoSpriteJson from "../../../assets/sprites/catto/catto_texture_v2.json";
 
 import ghSprite from "../../../assets/sprites/golden_knight/golden_knight_texture_v2.png";
 import ghSpriteJson from "../../../assets/sprites/golden_knight/golden_knight_texture_v2.json";
@@ -10,8 +15,11 @@ import ghSpriteJson from "../../../assets/sprites/golden_knight/golden_knight_te
 import skeletonSprite from "../../../assets/sprites/skeleton/skeleton_texture_v4.png";
 import skeletonSpriteJson from "../../../assets/sprites/skeleton/skeleton_texture_v4.json";
 
-import rathalosSprite from "../../../assets/sprites/rathalos_hunter/rathalos_texture_v2.png";
-import rathalosSpriteJson from "../../../assets/sprites/rathalos_hunter/rathalos_texture_v2.json";
+import rathalosSprite from "../../../assets/sprites/rathalos_hunter/rathalos_texture_v3.png";
+import rathalosSpriteJson from "../../../assets/sprites/rathalos_hunter/rathalos_texture_v3.json";
+
+import mobsSprite from "../../../assets/sprites/mobs/mobs_v2.png";
+import mobsSpriteJson from "../../../assets/sprites/mobs/mobs_v2.json";
 
 import blueBorderBrownBg from "../../../assets/ui/tile_0005.png";
 import blueBorderBlueBg from "../../../assets/ui/tile_0029.png";
@@ -33,6 +41,8 @@ import {
 import type { ANIM_CONFIG } from "../../types/anim.types.ts";
 import SCENE_NAMES from "../../constants/scene_names.ts";
 import RATHALOS_ANIM_CONFIGS from "../../constants/anim_configs/rathalos_anim_configs.ts";
+import CATTO_ANIM_CONFIGS from "../../constants/anim_configs/catto_anim_configs.ts";
+import MOBS_ANIM_CONFIGS from "../../constants/anim_configs/mobs_anim_configs.ts";
 
 export class Preloader extends Scene {
   constructor() {
@@ -74,8 +84,16 @@ export class Preloader extends Scene {
     ]);
   }
 
+  initMobsAnimations() {
+    this.generateAnimations(MOBS_ANIM_CONFIGS);
+  }
+
   initRathalosAnimations() {
     this.generateAnimations(RATHALOS_ANIM_CONFIGS);
+  }
+
+  initCattoAnimations() {
+    this.generateAnimations(CATTO_ANIM_CONFIGS);
   }
 
   init() {
@@ -105,6 +123,13 @@ export class Preloader extends Scene {
     this.load.image(TEXTURE_NAMES.LOGO, INGameLogo);
     this.load.image(TEXTURE_NAMES.HERO_BG, heroBG);
 
+    this.load.image(TEXTURE_NAMES.LEFT_ARROW, leftArrow);
+    // this.load.image(TEXTURE_NAMES.RIGHT_ARROW, rightArrow);
+    this.load.svg(
+      TEXTURE_NAMES.RIGHT_ARROW,
+      "../../../assets/right_keycap_arrow.svg",
+    );
+
     this.load.image(TEXTURE_NAMES.BLUE_BORDER_BROWN_BG, blueBorderBrownBg);
     this.load.image(TEXTURE_NAMES.BROWN_BORDER_WHITE_BG, brownBorderWhiteBg);
     this.load.image(TEXTURE_NAMES.BLUE_BORDER_BLUE_BG, blueBorderBlueBg);
@@ -118,11 +143,15 @@ export class Preloader extends Scene {
 
     this.load.atlas(TEXTURE_NAMES.SKELETON, skeletonSprite, skeletonSpriteJson);
 
+    this.load.atlas(TEXTURE_NAMES.MOBS, mobsSprite, mobsSpriteJson);
+
     this.load.atlas(
       TEXTURE_NAMES.RATHALOS_HUNTER,
       rathalosSprite,
       rathalosSpriteJson,
     );
+
+    this.load.atlas(TEXTURE_NAMES.CATTO, cattoSprite, cattoSpriteJson);
   }
 
   create() {
@@ -130,9 +159,11 @@ export class Preloader extends Scene {
     //  For example, you can define global animations here, so we can use them in other scenes.
     this.initGoldenKnightAnimations();
     this.initRathalosAnimations();
+    this.initCattoAnimations();
     this.initSkeletonAnimations();
+    this.initMobsAnimations();
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.launch(SCENE_NAMES.NAVBAR).launch(SCENE_NAMES.BATTLE);
+    this.scene.launch(SCENE_NAMES.NAVBAR).launch(SCENE_NAMES.CHARACTER_DETAILS);
   }
 }

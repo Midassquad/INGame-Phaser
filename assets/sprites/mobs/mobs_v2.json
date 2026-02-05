@@ -1,0 +1,397 @@
+{
+	"textures": [
+		{
+			"image": "mobs_v2",
+			"format": "RGBA8888",
+			"size": {
+				"w": 372,
+				"h": 364
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "ogre/6.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 64,
+						"y": 48,
+						"w": 113,
+						"h": 80
+					},
+					"frame": {
+						"x": 3,
+						"y": 3,
+						"w": 113,
+						"h": 80
+					}
+				},
+				{
+					"filename": "goblin/6.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 64,
+						"y": 112,
+						"w": 113,
+						"h": 80
+					},
+					"frame": {
+						"x": 3,
+						"y": 89,
+						"w": 113,
+						"h": 80
+					}
+				},
+				{
+					"filename": "bug/4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 59,
+						"y": 55,
+						"w": 101,
+						"h": 81
+					},
+					"frame": {
+						"x": 122,
+						"y": 3,
+						"w": 101,
+						"h": 81
+					}
+				},
+				{
+					"filename": "bug/3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 62,
+						"y": 61,
+						"w": 86,
+						"h": 75
+					},
+					"frame": {
+						"x": 122,
+						"y": 90,
+						"w": 86,
+						"h": 75
+					}
+				},
+				{
+					"filename": "bug/6.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 62,
+						"y": 62,
+						"w": 85,
+						"h": 74
+					},
+					"frame": {
+						"x": 122,
+						"y": 171,
+						"w": 85,
+						"h": 74
+					}
+				},
+				{
+					"filename": "bug/5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 61,
+						"y": 61,
+						"w": 83,
+						"h": 75
+					},
+					"frame": {
+						"x": 213,
+						"y": 171,
+						"w": 83,
+						"h": 75
+					}
+				},
+				{
+					"filename": "bug/1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 66,
+						"y": 61,
+						"w": 80,
+						"h": 75
+					},
+					"frame": {
+						"x": 214,
+						"y": 90,
+						"w": 80,
+						"h": 75
+					}
+				},
+				{
+					"filename": "bug/2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 67,
+						"y": 57,
+						"w": 74,
+						"h": 79
+					},
+					"frame": {
+						"x": 229,
+						"y": 3,
+						"w": 74,
+						"h": 79
+					}
+				},
+				{
+					"filename": "ogre/4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 55,
+						"y": 72,
+						"w": 99,
+						"h": 56
+					},
+					"frame": {
+						"x": 3,
+						"y": 175,
+						"w": 99,
+						"h": 56
+					}
+				},
+				{
+					"filename": "goblin/5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 74,
+						"y": 71,
+						"w": 102,
+						"h": 50
+					},
+					"frame": {
+						"x": 3,
+						"y": 237,
+						"w": 102,
+						"h": 50
+					}
+				},
+				{
+					"filename": "goblin/4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 74,
+						"y": 72,
+						"w": 100,
+						"h": 49
+					},
+					"frame": {
+						"x": 111,
+						"y": 252,
+						"w": 100,
+						"h": 49
+					}
+				},
+				{
+					"filename": "ogre/3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 70,
+						"y": 72,
+						"w": 84,
+						"h": 56
+					},
+					"frame": {
+						"x": 3,
+						"y": 293,
+						"w": 84,
+						"h": 56
+					}
+				},
+				{
+					"filename": "ogre/2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 71,
+						"y": 52,
+						"w": 52,
+						"h": 76
+					},
+					"frame": {
+						"x": 217,
+						"y": 252,
+						"w": 52,
+						"h": 76
+					}
+				},
+				{
+					"filename": "ogre/5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 77,
+						"y": 74,
+						"w": 71,
+						"h": 54
+					},
+					"frame": {
+						"x": 93,
+						"y": 307,
+						"w": 71,
+						"h": 54
+					}
+				},
+				{
+					"filename": "goblin/3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 60,
+						"y": 72,
+						"w": 69,
+						"h": 49
+					},
+					"frame": {
+						"x": 300,
+						"y": 88,
+						"w": 69,
+						"h": 49
+					}
+				},
+				{
+					"filename": "ogre/1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 68,
+						"y": 68,
+						"w": 52,
+						"h": 60
+					},
+					"frame": {
+						"x": 309,
+						"y": 3,
+						"w": 52,
+						"h": 60
+					}
+				},
+				{
+					"filename": "goblin/1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 73,
+						"y": 73,
+						"w": 55,
+						"h": 48
+					},
+					"frame": {
+						"x": 275,
+						"y": 252,
+						"w": 55,
+						"h": 48
+					}
+				},
+				{
+					"filename": "goblin/2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 74,
+						"y": 73,
+						"w": 46,
+						"h": 48
+					},
+					"frame": {
+						"x": 275,
+						"y": 306,
+						"w": 46,
+						"h": 48
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "http://free-tex-packer.com",
+		"version": "0.6.7"
+	}
+}

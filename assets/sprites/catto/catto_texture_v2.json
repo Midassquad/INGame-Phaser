@@ -1,0 +1,313 @@
+{
+	"textures": [
+		{
+			"image": "catto_texture_v2",
+			"format": "RGBA8888",
+			"size": {
+				"w": 303,
+				"h": 336
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "jump/jump_3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 20,
+						"y": 1,
+						"w": 97,
+						"h": 126
+					},
+					"frame": {
+						"x": 3,
+						"y": 3,
+						"w": 97,
+						"h": 126
+					}
+				},
+				{
+					"filename": "jump/jump_4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 20,
+						"y": 0,
+						"w": 97,
+						"h": 126
+					},
+					"frame": {
+						"x": 106,
+						"y": 3,
+						"w": 97,
+						"h": 126
+					}
+				},
+				{
+					"filename": "jump/jump_2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 21,
+						"y": 1,
+						"w": 96,
+						"h": 127
+					},
+					"frame": {
+						"x": 3,
+						"y": 135,
+						"w": 96,
+						"h": 127
+					}
+				},
+				{
+					"filename": "idle/idle_4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 32,
+						"w": 103,
+						"h": 96
+					},
+					"frame": {
+						"x": 105,
+						"y": 135,
+						"w": 103,
+						"h": 96
+					}
+				},
+				{
+					"filename": "idle/idle_3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 13,
+						"y": 32,
+						"w": 91,
+						"h": 96
+					},
+					"frame": {
+						"x": 209,
+						"y": 3,
+						"w": 91,
+						"h": 96
+					}
+				},
+				{
+					"filename": "idle/idle_2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 22,
+						"y": 32,
+						"w": 82,
+						"h": 96
+					},
+					"frame": {
+						"x": 214,
+						"y": 105,
+						"w": 82,
+						"h": 96
+					}
+				},
+				{
+					"filename": "jump/jump_1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 23,
+						"y": 32,
+						"w": 82,
+						"h": 96
+					},
+					"frame": {
+						"x": 214,
+						"y": 207,
+						"w": 82,
+						"h": 96
+					}
+				},
+				{
+					"filename": "idle/idle_1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 24,
+						"y": 32,
+						"w": 81,
+						"h": 96
+					},
+					"frame": {
+						"x": 105,
+						"y": 237,
+						"w": 81,
+						"h": 96
+					}
+				},
+				{
+					"filename": "idle/idle_7.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 24,
+						"y": 32,
+						"w": 81,
+						"h": 96
+					},
+					"frame": {
+						"x": 105,
+						"y": 237,
+						"w": 81,
+						"h": 96
+					}
+				},
+				{
+					"filename": "idle/idle_6.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 22,
+						"y": 32,
+						"w": 82,
+						"h": 96
+					},
+					"frame": {
+						"x": 214,
+						"y": 105,
+						"w": 82,
+						"h": 96
+					}
+				},
+				{
+					"filename": "idle/idle_5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 13,
+						"y": 32,
+						"w": 91,
+						"h": 96
+					},
+					"frame": {
+						"x": 209,
+						"y": 3,
+						"w": 91,
+						"h": 96
+					}
+				},
+				{
+					"filename": "jump/jump_7.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 23,
+						"y": 32,
+						"w": 82,
+						"h": 96
+					},
+					"frame": {
+						"x": 214,
+						"y": 207,
+						"w": 82,
+						"h": 96
+					}
+				},
+				{
+					"filename": "jump/jump_6.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 21,
+						"y": 1,
+						"w": 96,
+						"h": 127
+					},
+					"frame": {
+						"x": 3,
+						"y": 135,
+						"w": 96,
+						"h": 127
+					}
+				},
+				{
+					"filename": "jump/jump_5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 20,
+						"y": 1,
+						"w": 97,
+						"h": 126
+					},
+					"frame": {
+						"x": 3,
+						"y": 3,
+						"w": 97,
+						"h": 126
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "http://free-tex-packer.com",
+		"version": "0.6.7"
+	}
+}

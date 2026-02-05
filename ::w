@@ -1,0 +1,311 @@
+import { EventBus } from "../EventBus";
+import { Animations, GameObjects, Scene } from "phaser";
+import {
+  CATTO_KEYS,
+  RATHALOS_HUNTER_KEYS,
+  SKELETON_KEYS,
+} from "../../constants/anim_keys.ts";
+import Golden_Knight from "../../characters/Golden_Knight.tsx";
+import TEXTURE_NAMES from "../../constants/texture_names.ts";
+import SCENE_NAMES from "../../constants/scene_names.ts";
+import SAMPLE_TASKS from "../../constants/sample_tasks.ts";
+import { AIDialogBoxDrawer } from "../ui/AIDialogBoxDrawer.tsx";
+import { TaskDetailsDrawer } from "../ui/TaskDetailsDrawer.tsx";
+import Unit from "../../characters/Unit.tsx";
+import Skeleton from "../../characters/Skeleton.tsx";
+import Pet from "../../characters/Pet.tsx";
+import Bug from "../../characters/Bug.tsx";
+import Ogre from "../../characters/Ogre.tsx";
+import Goblin from "../../characters/Goblin.tsx";
+
+interface Quest {
+  title: string;
+  description: string;
+}
+
+export class Battle extends Scene {
+  background: GameObjects.Image | undefined;
+
+  hero: Golden_Knight | undefined;
+  heroSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody | undefined;
+
+  isHeroNearAnEnemy: boolean;
+
+  selectedSprite: Unit | undefined;
+
+  taskDetailsDrawer: TaskDetailsDrawer | undefined;
+  aiDialogBox: AIDialogBoxDrawer | undefined;
+
+  leftKey: Phaser.Input.Keyboard.Key | undefined;
+  rightKey: Phaser.Input.Keyboard.Key | undefined;
+  upKey: Phaser.Input.Keyboard.Key | undefined;
+  downKey: Phaser.Input.Keyboard.Key | undefined;
+
+  fKey: Phaser.Input.Keyboard.Key | undefined;
+
+  pet: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody | undefined;
+  hasNewMessage: boolean;
+
+  constructor() {
+    super(SCENE_NAMES.BATTLE);
+
+    this.isHeroNearAnEnemy = false;
+    this.hasNewMessage = false;
+  }
+
+  setupControllerListener() {
+    EventBus.on("controls-pressed", (type: string) => {
+      if (type === "attack") {
+        this.hero?.attack();
+      } else {
+        this.hero?.walk(type);
+      }
+    });
+
+    this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
+      EventBus.removeListener("controls-pressed");
+    });
+  }
+
+  setupKeyboardEvents() {
+    this.leftKey = this.input.keyboard?.addKey("LEFT");
+    this.rightKey = this.input.keyboard?.addKey("RIGHT");
+    this.upKey = this.input.keyboard?.addKey("UP");
+    this.downKey = this.input.keyboard?.addKey("DOWN");
+
+    this.fKey = this.input.keyboard?.addKey("F");
+
+    this.leftKey?.on("down", () => this.hero?.walk("left"));
+    this.rightKey?.on("down", () => this.hero?.walk("right"));
+    this.upKey?.on("down", () => this.hero?.walk("up"));
+    this.downKey?.on("down", () => this.hero?.walk("down"));
+
+    // this.leftKey?.on("up", () => this.hero?.stop());
+    // this.rightKey?.on("up", () => this.hero?.stop());
+    // this.upKey?.on("up", () => this.hero?.stop());
+    // this.downKey?.on("up", () => this.hero?.stop());
+
+    this.fKey?.on("down", () => this.hero?.attack());
+  }
+
+  init() {
+    this.setupControllerListener();
+  }
+
+  create() {
+    const gameW = this.scale.width;
+    const gameH = this.scale.height;
+
+    this.background = this.add.image(0, 0, "background");
+    this.background.setPosition(0, 0);
+    this.background.setOrigin(0, 0);
+    // this.background.setDisplaySize(gameH, gameH);
+    //
+    // this.hero = new Golden_Knight(
+    //   this,
+    //   TEXTURE_NAMES.GOLDEN_KNIGHT,
+    //   {
+    //     x: gameW / 2.7,
+    //     y: gameH / 1.7,
+    //   },
+    //   2,
+    //   GOLDEN_KNIGHT_KEYS.SLASH_RIGHT,
+    //   {
+    //     up: GOLDEN_KNIGHT_KEYS.IDLE_UP,
+    //     down: GOLDEN_KNIGHT_KEYS.IDLE_DOWN,
+    //     left: GOLDEN_KNIGHT_KEYS.IDLE_LEFT,
+    //     right: GOLDEN_KNIGHT_KEYS.IDLE_RIGHT,
+    //   },
+    //   {
+    //     up: GOLDEN_KNIGHT_KEYS.WALK_UP,
+    //     down: GOLDEN_KNIGHT_KEYS.WALK_DOWN,
+    //     left: GOLDEN_KNIGHT_KEYS.WALK_LEFT,
+    //     right: GOLDEN_KNIGHT_KEYS.WALK_RIGHT,
+    //   },
+    //   {
+    //     up: GOLDEN_KNIGHT_KEYS.SLASH_UP,
+    //     down: GOLDEN_KNIGHT_KEYS.SLASH_DOWN,
+    //     left: GOLDEN_KNIGHT_KEYS.SLASH_LEFT,
+    //     right: GOLDEN_KNIGHT_KEYS.SLASH_RIGHT,
+    //   },
+    // );
+    //
+    this.physics.add
+      .sprite(gameW / 2.5, gameH / 2.1, TEXTURE_NAMES.RATHALOS_HUNTER)
+      .setScale(2)
+      .play(RATHALOS_HUNTER_KEYS.SLASH);
+
+    // this.pet = new Pet(this, 0.7, {x: gameW/4, y: gameH/1.9})
+
+    this.pet = this.physics.add
+      .sprite(gameW / 4, gameH / 1.9, TEXTURE_NAMES.CATTO)
+      .setScale(0.7)
+      .play(CATTO_KEYS.IDLE)
+      .setInteractive({ cursor: "pointer" });
+
+    this.pet.on("pointerdown", () => {
+      if (this.hasNewMessage) {
+        this.hasNewMessage = false;
+        this.pet?.play(CATTO_KEYS.IDLE);
+      }
+      if (this.taskDetailsDrawer?.isShowing) {
+        this.taskDetailsDrawer?.hideDrawer();
+        this.aiDialogBox?.showDrawer();
+      } else {
+        this.taskDetailsDrawer?.showDrawer();
+        this.aiDialogBox?.hideDrawer();
+      }
+    });
+
+    this.setupKeyboardEvents();
+
+    this.taskDetailsDrawer = new TaskDetailsDrawer(this, 25, 25, {
+      title: SAMPLE_TASKS[0].title,
+      description: SAMPLE_TASKS[0].description,
+    });
+
+    this.taskDetailsDrawer.init(true);
+
+    this.aiDialogBox = new AIDialogBoxDrawer(
+      this,
+      25,
+      25,
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lectus ex, pellentesque quis feugiat in, elementum sit amet mauris. Cras eu sem vel velit fermentum tincidunt ut a est.\n\nAliquam dapibus ac arcu rhoncus tempus. Phasellus in tincidunt justo, ut posuere nunc.",
+    );
+    this.aiDialogBox.init(false);
+
+    // simulate new task update
+    this.input.keyboard?.addKey("U").on("down", () => {
+      // this.taskDetailsDrawer
+      //   ?.setTitle("New Title")
+      //   .setDescription(
+      //     "New description for this task\n\nVestibulum tortor felis, facilisis at iaculis commodo, dapibus et libero.\n\nNullam sit amet hendrerit erat, eu dapibus orci.",
+      //   );
+      //
+      // this.taskDetailsDrawer?.reAdjustSpacing();
+
+      this.hasNewMessage = true;
+      this.pet?.play(CATTO_KEYS.JUMP);
+      // set cattoAlert play to Jumping
+      this.aiDialogBox
+        ?.setMessage("Message has been updated.\n\nAnother line for testing...")
+        .reAdjustSpacing();
+    });
+
+    new Ogre(this, 1.8, { x: gameW / 2, y: gameH / 2 })
+      .getSprite()
+      .setSize(64, 64)
+      .setOffset(100, 0);
+    // this.spawnMobs(SAMPLE_TASKS, gameW, gameH);
+
+    EventBus.emit("current-scene-ready", this);
+  }
+
+  onHit(e: Animations.Animation, damage: number, attackKey: string) {
+    if (e.key.includes(attackKey)) {
+      if (this.isHeroNearAnEnemy) {
+        console.log("HIT!", damage);
+      } else {
+        console.log("MISS!");
+      }
+    }
+  }
+
+  spawnMobs(
+    quests: Quest[],
+    gameW: number,
+    gameH: number,
+  ): Phaser.GameObjects.Container {
+    const numberofMobs = quests.length;
+
+    const mobsContainer: Phaser.GameObjects.Container = this.add.container(
+      gameW / 1.7,
+      gameH / 2.5,
+    );
+
+    // generate coords
+    let generatedCoords: { x: number; y: number }[] = [];
+
+    // max 12 sprites
+    // max 4 on x
+    // max 3 on y
+    // we set it to 96 since if we use 64, some sprites overlap
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        generatedCoords = [
+          ...generatedCoords,
+          {
+            x: i * 96,
+            y: j * 96,
+          },
+        ];
+      }
+    }
+
+    for (let i = 0; i < numberofMobs; i++) {
+      let mob;
+
+      if (i === 0) {
+        // 0x96
+        // if first, highlight the first mob,
+        // select the 0x96 coords which is right next to the hero
+        mob = new Ogre(this, 1.8, generatedCoords[1]);
+        generatedCoords.splice(1, 1);
+        mob.target();
+        this.selectedSprite = mob;
+      } else {
+        const randomIndex = Math.floor(Math.random() * generatedCoords.length);
+        const selectedCoords = generatedCoords[randomIndex];
+        mob = new Skeleton(this, 2, selectedCoords);
+        generatedCoords.splice(randomIndex, 1);
+      }
+
+      const mobSprite = mob.getSprite();
+
+      mobSprite.on("pointerdown", () => this.onSelectMob(mob, quests[i]));
+
+      // skelSprite.on("pointerup", () => {
+      //   skel.unTarget();
+      // });
+
+      mobsContainer.add(mobSprite);
+    }
+
+    return mobsContainer;
+  }
+
+  onSelectMob(mob: Unit, quest: Quest) {
+    this.selectedSprite?.unTarget();
+    this.selectedSprite = mob;
+    mob.target(); // set tint
+    this.taskDetailsDrawer
+      ?.setTitle(quest.title)
+      .setDescription(quest.description);
+
+    this.taskDetailsDrawer?.reAdjustSpacing();
+
+    if (this.aiDialogBox?.isShowing) {
+      this.aiDialogBox?.hideDrawer();
+      this.taskDetailsDrawer?.showDrawer();
+    }
+  }
+
+  update() {
+    // const heroCoor: { x: number; y: number } = this.hero!.getCoordinates();
+    // const distance = Phaser.Math.Distance.Between(
+    //   heroCoor.x,
+    //   heroCoor.y,
+    //   this.skeleton.x,
+    //   this.skeleton.y,
+    // );
+    //
+    // if (distance > 200) {
+    //   // far away, miss the attack
+    //   this.isHeroNearAnEnemy = false;
+    // } else {
+    //   // near, damage it!!
+    //   //
+    //   this.isHeroNearAnEnemy = true;
+    // }
+  }
+}

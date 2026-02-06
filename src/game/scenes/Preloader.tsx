@@ -8,6 +8,7 @@ import rightArrow from "../../../assets/right_arrow.png";
 
 import cattoSprite from "../../../assets/sprites/catto/catto_texture_v2.png";
 import cattoSpriteJson from "../../../assets/sprites/catto/catto_texture_v2.json";
+import splashScreenBG from "../../../assets/splash_screen.png";
 
 import ghSprite from "../../../assets/sprites/golden_knight/golden_knight_texture_v2.png";
 import ghSpriteJson from "../../../assets/sprites/golden_knight/golden_knight_texture_v2.json";
@@ -43,7 +44,6 @@ import SCENE_NAMES from "../../constants/scene_names.ts";
 import RATHALOS_ANIM_CONFIGS from "../../constants/anim_configs/rathalos_anim_configs.ts";
 import CATTO_ANIM_CONFIGS from "../../constants/anim_configs/catto_anim_configs.ts";
 import MOBS_ANIM_CONFIGS from "../../constants/anim_configs/mobs_anim_configs.ts";
-import { getTasks } from "../../services/inGameServices.ts";
 
 export class Preloader extends Scene {
   constructor() {
@@ -123,6 +123,7 @@ export class Preloader extends Scene {
 
     this.load.image(TEXTURE_NAMES.LOGO, INGameLogo);
     this.load.image(TEXTURE_NAMES.HERO_BG, heroBG);
+    this.load.image(TEXTURE_NAMES.SPLASH_SCREEN_BG, splashScreenBG);
 
     this.load.image(TEXTURE_NAMES.LEFT_ARROW, leftArrow);
     // this.load.image(TEXTURE_NAMES.RIGHT_ARROW, rightArrow);
@@ -165,13 +166,15 @@ export class Preloader extends Scene {
     this.initMobsAnimations();
 
     try {
-      const response = await getTasks();
       //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-      this.scene
-        .launch(SCENE_NAMES.NAVBAR, { quests: response })
-        .launch(SCENE_NAMES.CHARACTER_DETAILS, { quests: response });
+      // this.scene
+      //   .launch(SCENE_NAMES.NAVBAR, { quests: response })
+      //   .launch(SCENE_NAMES.CHARACTER_DETAILS, { quests: response });
+
+      this.scene.start(SCENE_NAMES.SPLASH_SCREEN);
     } catch (error) {
       console.log("Error Getting Tasks", error);
     }
+    //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
   }
 }

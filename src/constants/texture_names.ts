@@ -4,6 +4,7 @@ const TEXTURE_NAMES = {
   LEFT_ARROW: "left_arrow",
   RIGHT_ARROW: "right_arrow",
   CATTO: "catto",
+  SPLASH_SCREEN_BG: "splash_screen_bg",
   GOLDEN_KNIGHT: "golden_knight",
   RATHALOS_HUNTER: "rathalos_hunter",
   SKELETON: "skeleton",

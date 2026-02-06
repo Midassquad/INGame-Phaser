@@ -6,10 +6,10 @@ body {
 
 #game-container {
   background-color: #7ed2b7;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* position: relative; */
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 
 #game-container canvas {

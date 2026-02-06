@@ -11,6 +11,7 @@ export class CharacterDetails extends Scene {
   hero: Golden_Knight | undefined;
   isShowing: boolean;
   quests: Quest[] | undefined;
+  userName: string;
 
   constructor() {
     super(SCENE_NAMES.CHARACTER_DETAILS);
@@ -20,6 +21,7 @@ export class CharacterDetails extends Scene {
 
   init(gameData: GameData) {
     this.quests = gameData.quests;
+    this.userName = gameData.username;
   }
 
   create() {
@@ -57,7 +59,7 @@ export class CharacterDetails extends Scene {
       .setScale(1);
 
     this.add
-      .text(gameW / 2, gameH / 3, "Elton J.")
+      .text(gameW / 2, gameH / 3, this.userName)
       .setStyle({
         fontSize: 40,
         fontStyle: "bold",

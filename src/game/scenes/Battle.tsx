@@ -54,6 +54,7 @@ export class Battle extends Scene {
         name: "",
         description: "",
         modelName: "",
+        trelloCardId: "",
       },
     ];
 

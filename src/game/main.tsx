@@ -5,10 +5,21 @@ import { Preloader } from "./scenes/Preloader";
 import { CharacterDetails } from "./scenes/CharacterDetails";
 import { Navbar } from "./scenes/Navbar";
 import { Settings } from "./scenes/Settings";
+import { SplashScreen } from "./scenes/SplashScreen";
+import { LoginScreen } from "./scenes/LoginScreen";
 
 const config = {
   type: Phaser.AUTO,
-  scene: [Boot, Preloader, Battle, CharacterDetails, Settings, Navbar],
+  scene: [
+    Boot,
+    Preloader,
+    SplashScreen,
+    LoginScreen,
+    Battle,
+    CharacterDetails,
+    Settings,
+    Navbar,
+  ],
   physics: {
     default: "arcade",
     arcade: {
@@ -16,10 +27,14 @@ const config = {
       debug: false,
     },
   },
+  dom: {
+    createContainer: true, // This is crucial for DOM elements to display
+  },
   scale: {
     mode: Phaser.Scale.FIT,
     width: 720,
     height: 1280,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
     // width: window.innerWidth,
     // height: window.innerHeight,
     // max: {

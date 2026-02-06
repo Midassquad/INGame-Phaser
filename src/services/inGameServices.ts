@@ -1,11 +1,8 @@
-const BASE_URL = "http://34.135.16.205:80";
-const BOARD_ID = "697316f0b7593088c7655a28";
-const USER_ID = "gabrielreyes32";
-
-const getTasks = async () => {
+const BASE_URL = "34.135.16.205";
+const getTasks = async (username: string) => {
   try {
     const response = await fetch(
-      "http://34.135.16.205/api/initdata?username=gabrielreyes32&boardId=697316f0b7593088c7655a28",
+      `http://${BASE_URL}/api/initdata?username=${username}&boardId=697316f0b7593088c7655a28`,
     );
 
     // Error handling for bad HTTP statuses (e.g., 404 Not Found, 500 Server Error)

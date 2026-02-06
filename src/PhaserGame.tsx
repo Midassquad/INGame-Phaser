@@ -7,9 +7,8 @@ import {
 } from "react";
 import StartGame from "./game/main";
 import { EventBus } from "./game/EventBus";
-import SCENE_NAMES from "./constants/scene_names";
 import { Client } from "@stomp/stompjs";
-import { getTasks } from "./services/inGameServices";
+import SCENE_NAMES from "./constants/scene_names";
 
 export interface IRefPhaserGame {
   game: Phaser.Game | null;
@@ -27,8 +26,6 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
       useState<Phaser.Scene>();
 
     const [previousScene, setPreviousScene] = useState<string>("");
-
-    const [isSettingsShowing, setIsSettingsShowing] = useState<boolean>(false);
 
     useLayoutEffect(() => {
       if (game.current === null) {
@@ -66,23 +63,12 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
       });
 
       EventBus.on("change-scene", (data) => {
-        const { sceneName, quests } = data;
-        // currentSceneInstance?.scene.launch(SCENE_NAMES.NAVBAR).start(sceneName);
-        if (sceneName === SCENE_NAMES.SETTINGS) {
-          console.log("a");
-          setIsSettingsShowing(true);
-          currentSceneInstance?.scene.start(sceneName, { quests });
-        } else {
-          console.log("b");
-          setIsSettingsShowing(false);
-          if (isSettingsShowing) {
-            console.log("b.1");
-            currentSceneInstance?.scene.start(sceneName, { quests });
-          } else {
-            console.log("b.2");
-            currentSceneInstance?.scene.start(sceneName, { quests });
-          }
+        const { sceneName, gameData } = data;
+
+        if (sceneName === SCENE_NAMES.LOGIN_SCREEN) {
+          currentSceneInstance?.scene.stop(SCENE_NAMES.NAVBAR);
         }
+        currentSceneInstance?.scene.start(sceneName, gameData);
       });
 
       return () => {
@@ -100,32 +86,6 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         EventBus.emit("quests-received", { quests: cards });
       }
     };
-
-    useEffect(() => {
-      // Define and immediately call an async function inside useEffect
-      // (async () => {
-      //   const response = await getTasks();
-      //   EventBus.emit("quests-received", response);
-      // })();
-
-      const client = new Client({
-        brokerURL: "ws://34.135.16.205:80/ingame-websocket",
-        onConnect: () => {
-          console.log("Connected");
-          // Subscribe to a destination
-          client.subscribe("/topic/greetings", (message) => {
-            if (message.body && message.body !== "null") {
-              handleMessage(JSON.parse(message.body));
-            }
-          });
-        },
-      });
-      client.activate();
-
-      return () => {
-        client.deactivate();
-      };
-    }, []);
 
     // useEffect(() => {
     //   // Create WebSocket connection.

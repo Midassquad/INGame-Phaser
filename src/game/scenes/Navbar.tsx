@@ -2,13 +2,14 @@ import { Scene } from "phaser";
 import TEXTURE_NAMES from "../../constants/texture_names";
 import { EventBus } from "../EventBus";
 import SCENE_NAMES from "../../constants/scene_names";
-import type { Quest } from "../../types/global.types";
+import type { GameData, Quest } from "../../types/global.types";
+import { Client } from "@stomp/stompjs";
 
 export class Navbar extends Scene {
   #gameW: number | undefined;
   #gameH: number | undefined;
 
-  quests: Quest[] | undefined;
+  gameData: GameData;
 
   constructor() {
     super(SCENE_NAMES.NAVBAR);
@@ -90,37 +91,114 @@ export class Navbar extends Scene {
     if (nav == "Hero") {
       EventBus.emit("change-scene", {
         sceneName: SCENE_NAMES.CHARACTER_DETAILS,
-        quests: this.quests,
+        gameData: this.gameData,
       });
     }
     if (nav === "Battle") {
+      // this.scene
+      //   .stop(SCENE_NAMES.CHARACTER_DETAILS)
+      //   .run(SCENE_NAMES.BATTLE, this.gameData);
       EventBus.emit("change-scene", {
         sceneName: SCENE_NAMES.BATTLE,
-        quests: this.quests,
+        gameData: this.gameData,
       });
     }
-    if (nav === "Settings") {
+    if (nav === "Logout") {
       EventBus.emit("change-scene", {
-        sceneName: SCENE_NAMES.SETTINGS,
-        quests: this.quests,
+        sceneName: SCENE_NAMES.LOGIN_SCREEN,
+        gameData: this.gameData,
       });
     }
   }
 
-  init({ quests }) {
-    this.quests = quests;
+  setupWebsocket() {
+    const client = new Client({
+      brokerURL: "ws://34.135.16.205:80/ingame-websocket",
+      onConnect: () => {
+        console.log("Connected");
+        // Subscribe to a destination
+        client.subscribe("/topic/greetings", (message) => {
+          if (message.body && message.body !== "null") {
+            const body = JSON.parse(message.body);
+            console.log("body", body);
+
+            const { actionObject, actionOperation, actionType, boards } = body;
+            const { cards } = boards[0];
+
+            if (actionObject === "CARD" && actionOperation === "UPDATE") {
+              // check if cards is from this user
+              const { assignedMembers } = cards[0];
+              if (
+                assignedMembers.some(
+                  (member) => member.username === this.gameData.username,
+                )
+              ) {
+                const newQuest: Quest = cards[0];
+
+                const questIndex = this.gameData.quests.findIndex(
+                  (quest) => quest.trelloCardId === newQuest.trelloCardId,
+                );
+                console.log("questIndex", questIndex);
+
+                if (questIndex < 0) {
+                  this.gameData = {
+                    username: this.gameData.username,
+                    quests: [...this.gameData.quests, newQuest],
+                  };
+                } else {
+                  const formatQuests = this.gameData.quests;
+                  formatQuests[questIndex] = newQuest;
+                  this.gameData = {
+                    username: this.gameData.username,
+                    quests: formatQuests,
+                  };
+                }
+
+                EventBus.emit("quests-received", this.gameData);
+              } else if (actionType === "removeMemberFromCard") {
+                // check if cards belongs to the gameData quests, then remove it
+
+                const newQuest: Quest = cards[0];
+                const questIndex = this.gameData.quests.findIndex(
+                  (quest) => quest.trelloCardId === newQuest.trelloCardId,
+                );
+
+                if (questIndex > -1) {
+                  // it exists, remove it from the list of quests
+                  this.gameData = {
+                    username: this.gameData.username,
+                    quests: this.gameData.quests.filter(
+                      (quest) => quest.trelloCardId !== newQuest.trelloCardId,
+                    ),
+                  };
+                }
+
+                EventBus.emit("quests-received", this.gameData);
+              }
+            }
+          }
+        });
+      },
+    });
+
+    client.activate();
+
+    this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
+      console.log("de activate");
+      client.deactivate();
+    });
+  }
+
+  init(gameData: GameData) {
+    this.gameData = gameData;
+    this.setupWebsocket();
   }
 
   create() {
     this.#gameW = this.scale.width;
     this.#gameH = this.scale.height;
 
-    const navItems = this.generateEachNavs([
-      "Hero",
-      "Battle",
-      "Map",
-      "Settings",
-    ]);
+    const navItems = this.generateEachNavs(["Hero", "Battle", "Map", "Logout"]);
 
     const navContainer = this.add.container(
       0,

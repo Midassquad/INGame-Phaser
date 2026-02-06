@@ -3,6 +3,7 @@ import { Scene } from "phaser";
 import INGameLogo from "../../../assets/ingame-logo.png";
 
 import heroBG from "../../../assets/hero_bg.jpg";
+import splashScreenBG from "../../../assets/splash_screen.png";
 
 import ghSprite from "../../../assets/sprites/golden_knight/golden_knight_texture_v2.png";
 import ghSpriteJson from "../../../assets/sprites/golden_knight/golden_knight_texture_v2.json";
@@ -104,6 +105,7 @@ export class Preloader extends Scene {
 
     this.load.image(TEXTURE_NAMES.LOGO, INGameLogo);
     this.load.image(TEXTURE_NAMES.HERO_BG, heroBG);
+    this.load.image(TEXTURE_NAMES.SPLASH_SCREEN_BG, splashScreenBG);
 
     this.load.image(TEXTURE_NAMES.BLUE_BORDER_BROWN_BG, blueBorderBrownBg);
     this.load.image(TEXTURE_NAMES.BROWN_BORDER_WHITE_BG, brownBorderWhiteBg);
@@ -133,6 +135,6 @@ export class Preloader extends Scene {
     this.initSkeletonAnimations();
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.launch(SCENE_NAMES.NAVBAR).launch(SCENE_NAMES.BATTLE);
+    this.scene.launch(SCENE_NAMES.SPLASH_SCREEN);
   }
 }

@@ -1,6 +1,7 @@
 const TEXTURE_NAMES = {
   HERO_BG: "hero_bg",
   LOGO: "logo",
+  SPLASH_SCREEN_BG: "splash_screen_bg",
   GOLDEN_KNIGHT: "golden_knight",
   RATHALOS_HUNTER: "rathalos_hunter",
   SKELETON: "skeleton",

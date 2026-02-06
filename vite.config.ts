@@ -7,5 +7,5 @@ export default defineConfig({
     allowedHosts: ["zxic9a-ip-136-158-78-6.tunnelmole.net"],
   },
   plugins: [react()],
-  base: "INGame-Phaser",
+  base: "/INGame-Phaser/",
 });

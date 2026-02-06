@@ -3,7 +3,6 @@ import { Scene } from "phaser";
 import INGameLogo from "../../../assets/ingame-logo.png";
 
 import heroBG from "../../../assets/hero_bg.jpg";
-import leftArrow from "../../../assets/left_arrow.png";
 
 import cattoSprite from "../../../assets/sprites/catto/catto_texture_v2.png";
 import cattoSpriteJson from "../../../assets/sprites/catto/catto_texture_v2.json";
@@ -112,9 +111,6 @@ export class Preloader extends Scene {
     this.load.image(TEXTURE_NAMES.LOGO, INGameLogo);
     this.load.image(TEXTURE_NAMES.HERO_BG, heroBG);
     this.load.image(TEXTURE_NAMES.SPLASH_SCREEN_BG, splashScreenBG);
-
-    this.load.image(TEXTURE_NAMES.LEFT_ARROW, leftArrow);
-    // this.load.image(TEXTURE_NAMES.RIGHT_ARROW, rightArrow);
 
     this.load.image(TEXTURE_NAMES.BLUE_BORDER_BROWN_BG, blueBorderBrownBg);
     this.load.image(TEXTURE_NAMES.BROWN_BORDER_WHITE_BG, brownBorderWhiteBg);

@@ -2,10 +2,13 @@ import { Scene } from "phaser";
 import TEXTURE_NAMES from "../../constants/texture_names";
 import { EventBus } from "../EventBus";
 import SCENE_NAMES from "../../constants/scene_names";
+import type { Quest } from "../../types/global.types";
 
 export class Navbar extends Scene {
   #gameW: number | undefined;
   #gameH: number | undefined;
+
+  quests: Quest[] | undefined;
 
   constructor() {
     super(SCENE_NAMES.NAVBAR);
@@ -85,14 +88,27 @@ export class Navbar extends Scene {
   handleNavClick(nav: string) {
     console.log("Navigate to:", nav);
     if (nav == "Hero") {
-      EventBus.emit("change-scene", SCENE_NAMES.CHARACTER_DETAILS);
+      EventBus.emit("change-scene", {
+        sceneName: SCENE_NAMES.CHARACTER_DETAILS,
+        quests: this.quests,
+      });
     }
     if (nav === "Battle") {
-      EventBus.emit("change-scene", SCENE_NAMES.BATTLE);
+      EventBus.emit("change-scene", {
+        sceneName: SCENE_NAMES.BATTLE,
+        quests: this.quests,
+      });
     }
     if (nav === "Settings") {
-      EventBus.emit("change-scene", SCENE_NAMES.SETTINGS);
+      EventBus.emit("change-scene", {
+        sceneName: SCENE_NAMES.SETTINGS,
+        quests: this.quests,
+      });
     }
+  }
+
+  init({ quests }) {
+    this.quests = quests;
   }
 
   create() {

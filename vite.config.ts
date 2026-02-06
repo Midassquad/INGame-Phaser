@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    allowedHosts: ["6wlleu-ip-210-57-14-5.tunnelmole.net"],
+    allowedHosts: ["rb1obc-ip-136-158-78-6.tunnelmole.net"],
   },
   plugins: [react()],
 });

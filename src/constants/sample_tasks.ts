@@ -3,23 +3,23 @@ const SAMPLE_TASKS = [
     title: "Start Hackathon Development",
     description:
       "Create a Webhook for Trello to check on updates on Tasks, Stasus, Assignments etc.\n\nAlso, here's a new line just to test.",
-    mob: "goblin",
+    modelName: "goblin",
   },
   {
     title: "LCM ORPIN",
     description: "Redeploy ORPIN on Prod environment.",
-    mob: "skeleton",
+    modelName: "skeleton",
   },
   {
     title: "Visa Platinum",
     description: "Incorporate Visa Platinum cards on our flows.",
-    mob: "ogre",
+    modelName: "ogre",
   },
   {
     title: "Fix incorrect 'Next' button",
     description:
       "The 'Next' button on the english version of our feedback is returning a dutch translation.",
-    mob: "bug",
+    modelName: "bug",
   },
 ];
 

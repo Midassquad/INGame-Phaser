@@ -9,6 +9,7 @@ import StartGame from "./game/main";
 import { EventBus } from "./game/EventBus";
 import SCENE_NAMES from "./constants/scene_names";
 import { Client } from "@stomp/stompjs";
+import { getTasks } from "./services/inGameServices";
 
 export interface IRefPhaserGame {
   game: Phaser.Game | null;
@@ -64,21 +65,22 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         }
       });
 
-      EventBus.on("change-scene", (sceneName: string) => {
+      EventBus.on("change-scene", (data) => {
+        const { sceneName, quests } = data;
         // currentSceneInstance?.scene.launch(SCENE_NAMES.NAVBAR).start(sceneName);
         if (sceneName === SCENE_NAMES.SETTINGS) {
           console.log("a");
           setIsSettingsShowing(true);
-          currentSceneInstance?.scene.start(sceneName);
+          currentSceneInstance?.scene.start(sceneName, { quests });
         } else {
           console.log("b");
           setIsSettingsShowing(false);
           if (isSettingsShowing) {
             console.log("b.1");
-            currentSceneInstance?.scene.start(sceneName);
+            currentSceneInstance?.scene.start(sceneName, { quests });
           } else {
             console.log("b.2");
-            currentSceneInstance?.scene.start(sceneName);
+            currentSceneInstance?.scene.start(sceneName, { quests });
           }
         }
       });
@@ -89,17 +91,32 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
       };
     }, [currentActiveScene, ref, currentSceneInstance]);
 
-    const test = "ws://localhost:8080/gs-guide-websocket";
+    const handleMessage = (body) => {
+      console.log(body);
+      const { actionObject, actionOperation, boards } = body;
+      const { cards } = boards[0];
+
+      if (actionObject === "CARD" && actionOperation === "UPDATE") {
+        EventBus.emit("quests-received", { quests: cards });
+      }
+    };
 
     useEffect(() => {
+      // Define and immediately call an async function inside useEffect
+      // (async () => {
+      //   const response = await getTasks();
+      //   EventBus.emit("quests-received", response);
+      // })();
+
       const client = new Client({
-        brokerURL:
-          "ws://lgnccx-ip-210-57-14-5.tunnelmole.net/gs-guide-websocket",
+        brokerURL: "ws://34.135.16.205:80/ingame-websocket",
         onConnect: () => {
           console.log("Connected");
           // Subscribe to a destination
           client.subscribe("/topic/greetings", (message) => {
-            console.log(`Received: ${message.body}`);
+            if (message.body && message.body !== "null") {
+              handleMessage(JSON.parse(message.body));
+            }
           });
         },
       });
@@ -109,7 +126,26 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         client.deactivate();
       };
     }, []);
+
+    // useEffect(() => {
+    //   // Create WebSocket connection.
+    //   const socket = new WebSocket(
+    //     "ws://34.135.16.205:80/ingame-websocket",
+    //   );
     //
+    //   // Connection opened
+    //   socket.addEventListener("open", (event) => {
+    //     socket.send("Hello Server!");
+    //   });
+    //
+    //   // Listen for messages
+    //   socket.addEventListener("message", handleMessage);
+    //
+    //   return () => {
+    //     socket.removeEventListener("message", handleMessage);
+    //   };
+    // }, []);
+
     return <div id="game-container"></div>;
   },
 );

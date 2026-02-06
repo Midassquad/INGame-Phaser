@@ -5,15 +5,21 @@ import { RATHALOS_HUNTER_KEYS } from "../../constants/anim_keys.ts";
 import TEXTURE_NAMES from "../../constants/texture_names.ts";
 import SCENE_NAMES from "../../constants/scene_names.ts";
 import Pet from "../../characters/Pet.tsx";
+import type { GameData, Quest } from "../../types/global.types.ts";
 
 export class CharacterDetails extends Scene {
   hero: Golden_Knight | undefined;
   isShowing: boolean;
+  quests: Quest[] | undefined;
 
   constructor() {
     super(SCENE_NAMES.CHARACTER_DETAILS);
 
     this.isShowing = false;
+  }
+
+  init(gameData: GameData) {
+    this.quests = gameData.quests;
   }
 
   create() {

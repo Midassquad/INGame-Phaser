@@ -4,7 +4,6 @@ import { CATTO_KEYS, RATHALOS_HUNTER_KEYS } from "../../constants/anim_keys.ts";
 import Golden_Knight from "../../characters/Golden_Knight.tsx";
 import TEXTURE_NAMES from "../../constants/texture_names.ts";
 import SCENE_NAMES from "../../constants/scene_names.ts";
-import SAMPLE_TASKS from "../../constants/sample_tasks.ts";
 import { AIDialogBoxDrawer } from "../ui/AIDialogBoxDrawer.tsx";
 import { TaskDetailsDrawer } from "../ui/TaskDetailsDrawer.tsx";
 import Unit from "../../characters/Unit.tsx";
@@ -13,21 +12,21 @@ import Pet from "../../characters/Pet.tsx";
 import Bug from "../../characters/Bug.tsx";
 import Ogre from "../../characters/Ogre.tsx";
 import Goblin from "../../characters/Goblin.tsx";
-import type { Coordinates } from "../../types/global.types.ts";
-
-interface Quest {
-  title: string;
-  description: string;
-  mob: string;
-}
+import type { Coordinates, GameData, Quest } from "../../types/global.types.ts";
 
 export class Battle extends Scene {
+  gameW: number;
+  gameH: number;
+
   background: GameObjects.Image | undefined;
 
   hero: Golden_Knight | undefined;
   heroSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody | undefined;
 
   isHeroNearAnEnemy: boolean;
+
+  quests: Quest[];
+  mobsContainer: Phaser.GameObjects.Container | undefined;
 
   selectedSprite: Unit | undefined;
   lastSelectedMobSprite: Unit | undefined;
@@ -50,6 +49,16 @@ export class Battle extends Scene {
 
     this.isHeroNearAnEnemy = false;
     this.hasNewMessage = false;
+    this.quests = [
+      {
+        name: "",
+        description: "",
+        modelName: "",
+      },
+    ];
+
+    this.gameW = 0;
+    this.gameH = 0;
   }
 
   setupControllerListener() {
@@ -63,6 +72,16 @@ export class Battle extends Scene {
 
     this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
       EventBus.removeListener("controls-pressed");
+    });
+  }
+
+  setupListeners() {
+    EventBus.on("quests-received", (gameData: GameData) => {
+      this.onReceivedQuests(gameData);
+    });
+
+    this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
+      EventBus.removeListener("quests-received");
     });
   }
 
@@ -87,13 +106,16 @@ export class Battle extends Scene {
     this.fKey?.on("down", () => this.hero?.attack());
   }
 
-  init() {
+  init(gameData: GameData) {
+    const { quests } = gameData;
+    this.quests = quests;
     this.setupControllerListener();
+    this.setupListeners();
   }
 
   create() {
-    const gameW = this.scale.width;
-    const gameH = this.scale.height;
+    this.gameW = this.scale.width;
+    this.gameH = this.scale.height;
 
     this.background = this.add.image(0, 0, "background");
     this.background.setPosition(0, 0);
@@ -130,11 +152,11 @@ export class Battle extends Scene {
     // );
     //
     this.physics.add
-      .sprite(gameW / 2.5, gameH / 2.1, TEXTURE_NAMES.RATHALOS_HUNTER)
+      .sprite(this.gameW / 2.5, this.gameH / 2.1, TEXTURE_NAMES.RATHALOS_HUNTER)
       .setScale(2)
       .play(RATHALOS_HUNTER_KEYS.SLASH);
 
-    this.pet = new Pet(this, 0.7, { x: gameW / 4, y: gameH / 1.9 });
+    this.pet = new Pet(this, 0.7, { x: this.gameW / 4, y: this.gameH / 1.9 });
 
     const petSprite = this.pet.getSprite();
 
@@ -161,8 +183,8 @@ export class Battle extends Scene {
     this.setupKeyboardEvents();
 
     this.taskDetailsDrawer = new TaskDetailsDrawer(this, 25, 25, {
-      title: SAMPLE_TASKS[0].title,
-      description: SAMPLE_TASKS[0].description,
+      title: this.quests![0].name,
+      description: this.quests![0].description,
     });
 
     this.taskDetailsDrawer.init(true);
@@ -177,6 +199,7 @@ export class Battle extends Scene {
 
     // simulate new task update
     this.input.keyboard?.addKey("U").on("down", () => {
+      this.reSpawnMobs();
       // this.taskDetailsDrawer
       //   ?.setTitle("New Title")
       //   .setDescription(
@@ -196,7 +219,7 @@ export class Battle extends Scene {
     // new Skeleton(this, 2, { x: 360, y: gameH / 2 });
     // new Ogre(this, 2, { x: 370, y: gameH / 2 }).getSprite().setSize(64, 64);
 
-    this.spawnMobs(SAMPLE_TASKS, gameW, gameH);
+    this.spawnMobs(this.quests);
     EventBus.emit("current-scene-ready", this);
   }
 
@@ -210,15 +233,8 @@ export class Battle extends Scene {
     }
   }
 
-  spawnMobs(
-    quests: Quest[],
-    gameW: number,
-    gameH: number,
-  ): Phaser.GameObjects.Container {
-    const mobsContainer: Phaser.GameObjects.Container = this.add.container(
-      gameW / 1.7,
-      gameH / 2.5,
-    );
+  spawnMobs(quests: Quest[]): Phaser.GameObjects.Container | undefined {
+    this.mobsContainer = this.add.container(this.gameW / 1.7, this.gameH / 2.5);
 
     // generate coords
     let generatedCoords: Coordinates[] = [];
@@ -251,7 +267,7 @@ export class Battle extends Scene {
         // 0x96
         // if first, highlight the first mob,
         // select the 0x96 c, coordsoords which is right next to the hero
-        mob = this.setMob(quests[i].mob, generatedCoords[1]);
+        mob = this.setMob(quests[i].modelName, generatedCoords[1]);
         generatedCoords.splice(1, 1);
         mob.target();
         this.selectedSprite = mob;
@@ -265,7 +281,7 @@ export class Battle extends Scene {
       } else {
         const randomIndex = Math.floor(Math.random() * generatedCoords.length);
         const selectedCoords = generatedCoords[randomIndex];
-        mob = this.setMob(quests[i].mob, selectedCoords);
+        mob = this.setMob(quests[i].modelName, selectedCoords);
         generatedCoords.splice(randomIndex, 1);
 
         coordsWithIndex = [
@@ -298,9 +314,14 @@ export class Battle extends Scene {
 
     for (const c of coordsWithIndex) {
       const { index } = c;
-      mobsContainer.add(mobSprites[index]);
+      this.mobsContainer?.add(mobSprites[index]);
     }
-    return mobsContainer;
+    return this.mobsContainer;
+  }
+
+  reSpawnMobs() {
+    this.mobsContainer?.destroy();
+    this.spawnMobs(this.quests);
   }
 
   setMob(mob: string, coords: Coordinates) {
@@ -323,7 +344,7 @@ export class Battle extends Scene {
     this.lastSelectedMobSprite = mob;
     mob.target(); // set tint
     this.taskDetailsDrawer
-      ?.setTitle(quest.title)
+      ?.setTitle(quest.name)
       .setDescription(quest.description);
 
     this.taskDetailsDrawer?.reAdjustSpacing();
@@ -332,6 +353,16 @@ export class Battle extends Scene {
       this.aiDialogBox?.hideDrawer();
       this.taskDetailsDrawer?.showDrawer();
     }
+  }
+
+  onReceivedQuests(gameData: GameData) {
+    this.quests = gameData.quests;
+    this.reSpawnMobs();
+    this.taskDetailsDrawer
+      ?.setTitle(this.quests[0].name)
+      .setDescription(this.quests[0].description);
+
+    this.taskDetailsDrawer?.reAdjustSpacing();
   }
 
   update() {

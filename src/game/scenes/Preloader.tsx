@@ -43,6 +43,7 @@ import SCENE_NAMES from "../../constants/scene_names.ts";
 import RATHALOS_ANIM_CONFIGS from "../../constants/anim_configs/rathalos_anim_configs.ts";
 import CATTO_ANIM_CONFIGS from "../../constants/anim_configs/catto_anim_configs.ts";
 import MOBS_ANIM_CONFIGS from "../../constants/anim_configs/mobs_anim_configs.ts";
+import { getTasks } from "../../services/inGameServices.ts";
 
 export class Preloader extends Scene {
   constructor() {
@@ -154,7 +155,7 @@ export class Preloader extends Scene {
     this.load.atlas(TEXTURE_NAMES.CATTO, cattoSprite, cattoSpriteJson);
   }
 
-  create() {
+  async create() {
     //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
     //  For example, you can define global animations here, so we can use them in other scenes.
     this.initGoldenKnightAnimations();
@@ -163,7 +164,14 @@ export class Preloader extends Scene {
     this.initSkeletonAnimations();
     this.initMobsAnimations();
 
-    //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.launch(SCENE_NAMES.NAVBAR).launch(SCENE_NAMES.CHARACTER_DETAILS);
+    try {
+      const response = await getTasks();
+      //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
+      this.scene
+        .launch(SCENE_NAMES.NAVBAR, { quests: response })
+        .launch(SCENE_NAMES.CHARACTER_DETAILS, { quests: response });
+    } catch (error) {
+      console.log("Error Getting Tasks", error);
+    }
   }
 }

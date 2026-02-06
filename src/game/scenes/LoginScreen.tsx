@@ -30,12 +30,6 @@ export class LoginScreen extends Scene {
   }
 
   create() {
-    const hiddenInput = document.createElement("input");
-    hiddenInput.style = "visibility: hidden";
-    this.add.dom(this.scale.width / 2, this.scale.width / 2, hiddenInput);
-    console.log("focus");
-    hiddenInput.focus();
-
     this.inputText = "";
     // Add background image
     this.background = this.add.image(0, 0, TEXTURE_NAMES.HERO_BG);
@@ -51,19 +45,31 @@ export class LoginScreen extends Scene {
     // Input box background
     // this.inputBox = this.add.rectangle(360, 460, 500, 60, 0x2c3e50);
 
-    this.inputBox = this.add.container(0, 20);
-    this.add.nineslice(
-      360,
-      460,
-      TEXTURE_NAMES.BROWN_BORDER_WHITE_BG,
-      0,
-      460,
-      60,
-      10,
-      10,
-      10,
-      10,
-    );
+    const inputBg = this.add
+      .nineslice(
+        360,
+        460,
+        TEXTURE_NAMES.BROWN_BORDER_WHITE_BG,
+        0,
+        460,
+        60,
+        10,
+        10,
+        10,
+        10,
+      )
+      .setInteractive({ cursor: "text" });
+    inputBg.on("pointerdown", () => {
+      console.log("point!");
+      const input = document.createElement("input");
+      input.type = "text";
+      input.style.visibility = "hidden";
+      document.body.appendChild(input);
+      input.focus();
+
+      // Optionally remove the element after focus
+      setTimeout(() => document.body.removeChild(input), 100);
+    });
     // this.inputBox.setStrokeStyle(2, 0xa3703a);
 
     // Placeholder text
@@ -101,11 +107,11 @@ export class LoginScreen extends Scene {
     // Enable keyboard input
     this.input.keyboard.on("keydown", this.handleKeyPress, this);
 
-    // Make the input box interactive
-    this.inputBox.setInteractive();
-    this.inputBox.on("pointerdown", () => {
-      this.inputBox.setStrokeStyle(3, 0xa3703a);
-    });
+    // // Make the input box interactive
+    // this.inputBox.setInteractive();
+    // this.inputBox.on("pointerdown", () => {
+    //   this.inputBox.setStrokeStyle(3, 0xa3703a);
+    // });
 
     // Button
     const buttonContainer = this.add.container(0, 20);
@@ -140,8 +146,7 @@ export class LoginScreen extends Scene {
     buttonBg.setInteractive({ cursor: "pointer" });
 
     buttonBg.on("pointerdown", () => {
-      console.log("blur");
-      hiddenInput.blur();
+      console.log("LOGIN");
       this.onLogin();
     });
 

@@ -2,7 +2,7 @@ import { Scene } from "phaser";
 
 import INGameLogo from "../../../assets/ingame-logo.png";
 
-import heroBG from "../../../assets/hero_bg.jpg";
+import forestBG from "../../../assets/forest_pixel.png";
 
 import cattoSprite from "../../../assets/sprites/catto/catto_texture_v2.png";
 import cattoSpriteJson from "../../../assets/sprites/catto/catto_texture_v2.json";
@@ -17,6 +17,13 @@ import skeletonSpriteJson from "../../../assets/sprites/skeleton/skeleton_textur
 import rathalosSprite from "../../../assets/sprites/rathalos_hunter/rathalos_texture_v3.png";
 import rathalosSpriteJson from "../../../assets/sprites/rathalos_hunter/rathalos_texture_v3.json";
 
+import charactersSprite from "../../../assets/sprites/character_textures.png";
+import charactersSpriteJson from "../../../assets/sprites/character_textures.json";
+
+import derSprite from "../../../assets/sprites/der/der_texture.png";
+import derSpriteJson from "../../../assets/sprites/der/der_texture.json";
+import derSit from "../../../assets/sprites/der/der_sit.png";
+
 import mobsSprite from "../../../assets/sprites/mobs/mobs_v2.png";
 import mobsSpriteJson from "../../../assets/sprites/mobs/mobs_v2.json";
 
@@ -25,6 +32,16 @@ import blueBorderBlueBg from "../../../assets/ui/tile_0029.png";
 import brownBorderWhiteBg from "../../../assets/ui/tile_0000.png";
 import blueBorderWhiteBg from "../../../assets/ui/tile_0007.png";
 import blueBorderBlueBgNoDesign from "../../../assets/ui/tile_0015.png";
+import woodenBg from "../../../assets/ui/wooden_bg.png";
+import headerBg from "../../../assets/ui/header_bg.png";
+import nonSelectedBg from "../../../assets/ui/non selected bg.png";
+import selectedBg from "../../../assets/ui/selected bg.png";
+import menuBg from "../../../assets/ui/menu bg.png";
+import contentBg from "../../../assets/ui/content_bg.png";
+import swordIcon from "../../../assets/ui/sword.png";
+import homeIcon from "../../../assets/ui/home.png";
+import mapIcon from "../../../assets/ui/map.png";
+import settingsIcon from "../../../assets/ui/settings.png";
 
 import TEXTURE_NAMES from "../../constants/texture_names.ts";
 import {
@@ -42,6 +59,14 @@ import SCENE_NAMES from "../../constants/scene_names.ts";
 import RATHALOS_ANIM_CONFIGS from "../../constants/anim_configs/rathalos_anim_configs.ts";
 import CATTO_ANIM_CONFIGS from "../../constants/anim_configs/catto_anim_configs.ts";
 import MOBS_ANIM_CONFIGS from "../../constants/anim_configs/mobs_anim_configs.ts";
+import {
+  CIRI_ANIM_CONFIGS,
+  DK_ANIM_CONFIGS,
+  GAREN_ANIM_CONFIGS,
+  JEAN_ANIM_CONFIGS,
+  MK_ANIM_CONFIGS,
+} from "../../constants/anim_configs/char_anim_configs.ts";
+import DER_ANIM_CONFIGS from "../../constants/anim_configs/der_anim_configs.ts";
 
 export class Preloader extends Scene {
   constructor() {
@@ -95,6 +120,20 @@ export class Preloader extends Scene {
     this.generateAnimations(CATTO_ANIM_CONFIGS);
   }
 
+  initCharAnimations() {
+    this.generateAnimations([
+      ...JEAN_ANIM_CONFIGS,
+      ...GAREN_ANIM_CONFIGS,
+      ...CIRI_ANIM_CONFIGS,
+      ...DK_ANIM_CONFIGS,
+      ...MK_ANIM_CONFIGS,
+    ]);
+  }
+
+  initDerAnimations() {
+    this.generateAnimations(DER_ANIM_CONFIGS);
+  }
+
   init() {
     //  We loaded this image in our Boot Scene, so we can display it here
     // this.add.image(0, 0, "background");
@@ -109,8 +148,15 @@ export class Preloader extends Scene {
     //
 
     this.load.image(TEXTURE_NAMES.LOGO, INGameLogo);
-    this.load.image(TEXTURE_NAMES.HERO_BG, heroBG);
+    this.load.image(TEXTURE_NAMES.FOREST, forestBG);
     this.load.image(TEXTURE_NAMES.SPLASH_SCREEN_BG, splashScreenBG);
+    this.load.image(TEXTURE_NAMES.NON_SELECTED_BG, nonSelectedBg);
+    this.load.image(TEXTURE_NAMES.SELECTED_BG, selectedBg);
+    this.load.image(TEXTURE_NAMES.MENU_BG, menuBg);
+    this.load.image(TEXTURE_NAMES.SWORD_ICON, swordIcon);
+    this.load.image(TEXTURE_NAMES.HOME_ICON, homeIcon);
+    this.load.image(TEXTURE_NAMES.MAP_ICON, mapIcon);
+    this.load.image(TEXTURE_NAMES.SETTINGS_ICON, settingsIcon);
 
     this.load.image(TEXTURE_NAMES.BLUE_BORDER_BROWN_BG, blueBorderBrownBg);
     this.load.image(TEXTURE_NAMES.BROWN_BORDER_WHITE_BG, brownBorderWhiteBg);
@@ -120,8 +166,17 @@ export class Preloader extends Scene {
       TEXTURE_NAMES.BLUE_BORDER_BLUE_BG_NO_DESIGN,
       blueBorderBlueBgNoDesign,
     );
+    this.load.image(TEXTURE_NAMES.WOODEN_BG, woodenBg);
+    this.load.image(TEXTURE_NAMES.HEADER_BG, headerBg);
+    this.load.image(TEXTURE_NAMES.CONTENT_BG, contentBg);
 
     this.load.atlas(TEXTURE_NAMES.GOLDEN_KNIGHT, ghSprite, ghSpriteJson);
+
+    this.load.atlas(
+      TEXTURE_NAMES.CHARACTERS,
+      charactersSprite,
+      charactersSpriteJson,
+    );
 
     this.load.atlas(TEXTURE_NAMES.SKELETON, skeletonSprite, skeletonSpriteJson);
 
@@ -133,7 +188,12 @@ export class Preloader extends Scene {
       rathalosSpriteJson,
     );
 
+    this.load.atlas(TEXTURE_NAMES.DER, derSprite, derSpriteJson);
+    this.load.image(TEXTURE_NAMES.DER_SIT, derSit);
+
     this.load.atlas(TEXTURE_NAMES.CATTO, cattoSprite, cattoSpriteJson);
+
+    this.load.html("chatbox", "/INGame-Phaser/ingame-chatbox.html");
   }
 
   async create() {
@@ -144,6 +204,8 @@ export class Preloader extends Scene {
     this.initCattoAnimations();
     this.initSkeletonAnimations();
     this.initMobsAnimations();
+    this.initCharAnimations();
+    this.initDerAnimations();
 
     try {
       //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.

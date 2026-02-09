@@ -42,10 +42,40 @@ const MOBS_KEYS = {
   GOBLIN: "goblin",
 };
 
+const CHAR_KEYS = {
+  JEAN: {
+    ATTACK: "jean_attack",
+    WALK: "jean_walk",
+  },
+  GAREN: {
+    ATTACK: "garen_attack",
+    WALK: "garen_walk",
+  },
+  CIRI: {
+    ATTACK: "ciri_attack",
+    WALK: "ciri_walk",
+  },
+  DK: {
+    ATTACK: "dk_attack",
+    WALK: "dk_walk",
+  },
+  MK: {
+    ATTACK: "mk_attack",
+    WALK: "mk_walk",
+  },
+};
+
+const DER_KEYS = {
+  ATTACK: "der_attack",
+  WALK: "der_walk",
+};
+
 export {
   GOLDEN_KNIGHT_KEYS,
   RATHALOS_HUNTER_KEYS,
   SKELETON_KEYS,
   CATTO_KEYS,
   MOBS_KEYS,
+  CHAR_KEYS,
+  DER_KEYS,
 };

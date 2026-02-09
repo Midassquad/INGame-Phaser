@@ -5,19 +5,169 @@ body {
 }
 
 #game-container {
-  background-color: #7ed2b7;
+  background-color: #3f3f3f;
   /* position: relative; */
   /* display: flex; */
   /* justify-content: center; */
   /* align-items: center; */
 }
 
-#game-container canvas {
-  border: 5px solid #3f3f3f;
-}
+/* #game-container canvas { */
+/*   border: 5px solid #3f3f3f; */
+/* } */
 
 #appContainer {
   height: 100dvh;
   background-color: pink;
   position: relative;
+}
+
+.username-input {
+  font-size: 25px;
+  padding: 5px 20px;
+  color: #a3703a;
+  font-family: "PixelifySans";
+  background-color: #fff1d2;
+  width: 400px;
+  border: 0;
+  caret-color: #a3703a;
+}
+
+.username-input:focus {
+  outline: 0;
+}
+.username-input::placeholder {
+  color: #c9b5a2;
+}
+
+/* CHATBOX STYLES */
+
+.chat-outercont {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.chat-outercont.user {
+  justify-content: end;
+}
+
+.chat-outercont.user .chat-container {
+  flex-flow: row-reverse;
+}
+
+.chat-container {
+  box-sizing: border-box;
+  max-width: 80%;
+  display: flex;
+  gap: 18px;
+  padding-top: 4px;
+  align-items: end;
+}
+
+.chat-container p {
+  font-family: "PixelifySans";
+  font-size: 24px;
+  color: #a3703a;
+  margin: 0;
+}
+
+.chat-container .chat-thumb {
+  min-width: 50px;
+  height: 50px;
+  background-color: #fff1d3;
+  flex-basis: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #6d4b27;
+}
+
+.chat-container .chat-msg {
+  box-sizing: border-box;
+  padding: 8px 20px;
+  background-color: #fff1d3;
+  border: 5px solid #c58747;
+  box-shadow: 0 0 0 4px #6d4b27;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.chat-outer-msg span {
+  display: block;
+  padding-bottom: 5px;
+  font-family: "PixelifySans";
+  font-size: 20px;
+  color: white;
+  text-align: left;
+}
+
+.user.chat-outercont .chat-outer-msg,
+.user.chat-outercont .chat-outer-msg span {
+  text-align: right;
+}
+
+#chatControls {
+  box-sizing: border-box;
+}
+
+#messageForm {
+  display: flex;
+  gap: 20px;
+}
+
+#messageForm input {
+  flex-basis: 80%;
+  border: 0;
+  font-size: 24px;
+  background-color: #fff1d3;
+  border: 5px solid #c58747;
+  box-shadow: 0 0 0 4px #6d4b27;
+  border-radius: 5px;
+  color: #a3703a;
+  font-family: "PixelifySans";
+  padding: 10px;
+}
+#messageForm input:focus {
+  outline: 0;
+}
+
+#messageForm button {
+  flex-basis: 20%;
+  background-color: #95aec6;
+  border: 5px solid #788d9e;
+  box-shadow: 0 0 0 4px #515f6b;
+  cursor: pointer;
+  color: #515f6b;
+  font-family: "PixelifySans";
+  font-size: 24px;
+  border-radius: 5px;
+}
+
+#footerChatbox {
+  padding-top: 40px;
+  text-align: center;
+  font-family: "PixelifySans";
+  font-size: 30px;
+  color: white;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000; /* Multiple shadows to create outline */
+  cursor: pointer;
+}
+
+.outer-container {
+  width: 710px;
+  border-radius: 5px;
+  border: 5px solid #93abc3;
+  box-shadow: 0 0 0 5px #515f6b;
+  background-color: #a3703a;
+  padding: 30px 30px 15px 30px;
+  box-sizing: border-box;
+}
+#chatBox {
+  width: 100%;
+  height: 500px;
+  display: block;
+  overflow-y: scroll;
 }

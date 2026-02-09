@@ -1,6 +1,11 @@
 import { EventBus } from "../EventBus";
 import { Animations, GameObjects, Scene } from "phaser";
-import { CATTO_KEYS, RATHALOS_HUNTER_KEYS } from "../../constants/anim_keys.ts";
+import {
+  CATTO_KEYS,
+  CHAR_KEYS,
+  DER_KEYS,
+  RATHALOS_HUNTER_KEYS,
+} from "../../constants/anim_keys.ts";
 import Golden_Knight from "../../characters/Golden_Knight.tsx";
 import TEXTURE_NAMES from "../../constants/texture_names.ts";
 import SCENE_NAMES from "../../constants/scene_names.ts";
@@ -13,6 +18,7 @@ import Bug from "../../characters/Bug.tsx";
 import Ogre from "../../characters/Ogre.tsx";
 import Goblin from "../../characters/Goblin.tsx";
 import type { Coordinates, GameData, Quest } from "../../types/global.types.ts";
+import { coachAI } from "../../services/inGameServices.ts";
 
 export class Battle extends Scene {
   gameW: number;
@@ -26,6 +32,7 @@ export class Battle extends Scene {
   isHeroNearAnEnemy: boolean;
 
   quests: Quest[];
+  username: string;
   mobsContainer: Phaser.GameObjects.Container | undefined;
 
   selectedSprite: Unit | undefined;
@@ -60,6 +67,7 @@ export class Battle extends Scene {
 
     this.gameW = 0;
     this.gameH = 0;
+    this.username = "";
   }
 
   setupControllerListener() {
@@ -108,8 +116,9 @@ export class Battle extends Scene {
   }
 
   init(gameData: GameData) {
-    const { quests } = gameData;
+    const { quests, username } = gameData;
     this.quests = quests;
+    this.username = username;
     this.setupControllerListener();
     this.setupListeners();
   }
@@ -152,38 +161,68 @@ export class Battle extends Scene {
     //   },
     // );
     //
+    //
+    //
+    // this.physics.add
+    //   .sprite(this.gameW / 2.5, this.gameH / 2.7, TEXTURE_NAMES.CHARACTERS)
+    //   .setScale(2)
+    //   .play(CHAR_KEYS.DK.ATTACK);
+    //
+    // this.physics.add
+    //   .sprite(this.gameW / 2.5, this.gameH / 2.5, TEXTURE_NAMES.CHARACTERS)
+    //   .setScale(2)
+    //   .play(CHAR_KEYS.CIRI.ATTACK);
+    //
     this.physics.add
-      .sprite(this.gameW / 2.5, this.gameH / 2.1, TEXTURE_NAMES.RATHALOS_HUNTER)
-      .setScale(2)
-      .play(RATHALOS_HUNTER_KEYS.SLASH);
+      .sprite(this.gameW / 2.5, this.gameH / 2.1, TEXTURE_NAMES.DER)
+      .setScale(1.1)
+      .play(DER_KEYS.ATTACK);
+
+    // this.physics.add
+    //   .sprite(this.gameW / 2.5, this.gameH / 1.8, TEXTURE_NAMES.CHARACTERS)
+    //   .setScale(2)
+    //   .play(CHAR_KEYS.JEAN.ATTACK);
+    //
+    // this.physics.add
+    //   .sprite(this.gameW / 2.5, this.gameH / 1.6, TEXTURE_NAMES.CHARACTERS)
+    //   .setScale(2)
+    //   .play(CHAR_KEYS.GAREN.ATTACK);
+    //
+    // this.physics.add
+    //   .sprite(this.gameW / 3, this.gameH / 1.5, TEXTURE_NAMES.RATHALOS_HUNTER)
+    //   .setScale(2)
+    //   .play(RATHALOS_HUNTER_KEYS.SLASH);
 
     this.pet = new Pet(this, 0.7, { x: this.gameW / 4, y: this.gameH / 1.9 });
 
     const petSprite = this.pet.getSprite();
 
-    petSprite.on("pointerdown", () => {
+    petSprite.on("pointerdown", async () => {
       this.selectedSprite?.unTarget();
       if (this.hasNewMessage) {
         this.hasNewMessage = false;
         petSprite?.play(CATTO_KEYS.IDLE);
       }
       if (this.taskDetailsDrawer?.isShowing) {
+        const response = await coachAI(this.username);
+        this.aiDialogBox?.setMessage(`\n${response}`).reAdjustSpacing();
+
         this.taskDetailsDrawer?.hideDrawer();
         this.aiDialogBox?.showDrawer();
 
         this.pet?.target();
         this.selectedSprite = this.pet;
       } else {
-        this.lastSelectedMobSprite?.target();
-        this.selectedSprite = this.lastSelectedMobSprite;
-        this.taskDetailsDrawer?.showDrawer();
-        this.aiDialogBox?.hideDrawer();
+        // this.lastSelectedMobSprite?.target();
+        // this.selectedSprite = this.lastSelectedMobSprite;
+        // this.taskDetailsDrawer?.showDrawer();
+        // this.aiDialogBox?.hideDrawer();
       }
     });
 
-    this.setupKeyboardEvents();
+    // this.setupKeyboardEvents();
 
-    this.taskDetailsDrawer = new TaskDetailsDrawer(this, 25, 25, {
+    this.taskDetailsDrawer = new TaskDetailsDrawer(this, 50, 25, {
       title: this.quests![0].name,
       description: this.quests![0].description,
     });
@@ -194,34 +233,81 @@ export class Battle extends Scene {
       this,
       25,
       25,
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lectus ex, pellentesque quis feugiat in, elementum sit amet mauris. Cras eu sem vel velit fermentum tincidunt ut a est.\n\nAliquam dapibus ac arcu rhoncus tempus. Phasellus in tincidunt justo, ut posuere nunc.",
+      "Hello! Hope you're having a good day!\n\nLet's go beat this quests!!",
     );
     this.aiDialogBox.init(false);
 
-    // simulate new task update
-    this.input.keyboard?.addKey("U").on("down", () => {
-      this.reSpawnMobs();
-      // this.taskDetailsDrawer
-      //   ?.setTitle("New Title")
-      //   .setDescription(
-      //     "New description for this task\n\nVestibulum tortor felis, facilisis at iaculis commodo, dapibus et libero.\n\nNullam sit amet hendrerit erat, eu dapibus orci.",
-      //   );
-      //
-      // this.taskDetailsDrawer?.reAdjustSpacing();
-
-      this.hasNewMessage = true;
-      this.pet?.getSprite()?.play(CATTO_KEYS.JUMP);
-      // set cattoAlert play to Jumping
-      this.aiDialogBox
-        ?.setMessage("Message has been updated.\n\nAnother line for testing...")
-        .reAdjustSpacing();
-    });
+    // // simulate new task update
+    // this.input.keyboard?.addKey("U").on("down", () => {
+    //   this.reSpawnMobs();
+    //   // this.taskDetailsDrawer
+    //   //   ?.setTitle("New Title")
+    //   //   .setDescription(
+    //   //     "New description for this task\n\nVestibulum tortor felis, facilisis at iaculis commodo, dapibus et libero.\n\nNullam sit amet hendrerit erat, eu dapibus orci.",
+    //   //   );
+    //   //
+    //   // this.taskDetailsDrawer?.reAdjustSpacing();
+    //
+    //   this.hasNewMessage = true;
+    //   this.pet?.getSprite()?.play(CATTO_KEYS.JUMP);
+    //   // set cattoAlert play to Jumping
+    //   this.aiDialogBox
+    //     ?.setMessage("Message has been updated.\n\nAnother line for testing...")
+    //     .reAdjustSpacing();
+    // });
 
     // new Skeleton(this, 2, { x: 360, y: gameH / 2 });
     // new Ogre(this, 2, { x: 370, y: gameH / 2 }).getSprite().setSize(64, 64);
 
     this.spawnMobs(this.quests);
+
     EventBus.emit("current-scene-ready", this);
+  }
+
+  scriptForChatbox() {
+    const chatBox = document.getElementById("chatBox");
+    const messageInput = document.getElementById(
+      "messageInput",
+    ) as HTMLInputElement;
+    const form = document.getElementById("messageForm");
+
+    form!.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const message = messageInput.value;
+
+      if (!message) return;
+
+      const parentElement = document.getElementById("chatBox");
+
+      const outerChatCont = document.createElement("div");
+      outerChatCont.className = "user chat-outercont";
+
+      const chatCont = document.createElement("div");
+      chatCont.className = "chat-container";
+
+      const chatThumb = document.createElement("div");
+      chatThumb.className = "chat-thumb";
+
+      const chatOuterMsg = document.createElement("div");
+      chatOuterMsg.className = "chat-outer-msg";
+
+      const chatMsg = document.createElement("div");
+      chatMsg.className = "chat-msg";
+
+      const newElement = document.createElement("p");
+      newElement.textContent = message;
+
+      chatMsg.append(newElement);
+      chatOuterMsg.append(chatMsg);
+      chatCont.append(chatThumb, chatOuterMsg);
+      outerChatCont.append(chatCont);
+      parentElement!.append(outerChatCont);
+
+      messageInput.value = "";
+
+      chatBox!.scrollTop = chatBox!.scrollHeight - chatBox!.clientHeight;
+    });
   }
 
   onHit(e: Animations.Animation, damage: number, attackKey: string) {

@@ -42,7 +42,7 @@ export class BottomDrawer {
       .nineslice(
         0,
         0,
-        TEXTURE_NAMES.BLUE_BORDER_BROWN_BG,
+        TEXTURE_NAMES.WOODEN_BG,
         0,
         this.sceneW / 3, // we divide by 3 since we scale it to 3
         this.containerHeight / 3, // we divide by 3 since we scale it to 3

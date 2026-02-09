@@ -53,6 +53,7 @@ export default class Unit {
       targets: this.#sprite,
       ease: "sine",
       repeat: -1,
+      repeatDelay: 1000,
       duration: 200,
       alpha: 0,
       yoyo: true,

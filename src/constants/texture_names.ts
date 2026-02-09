@@ -1,5 +1,6 @@
 const TEXTURE_NAMES = {
   HERO_BG: "hero_bg",
+  FOREST: "forest",
   LOGO: "logo",
   LEFT_ARROW: "left_arrow",
   RIGHT_ARROW: "right_arrow",
@@ -7,13 +8,26 @@ const TEXTURE_NAMES = {
   SPLASH_SCREEN_BG: "splash_screen_bg",
   GOLDEN_KNIGHT: "golden_knight",
   RATHALOS_HUNTER: "rathalos_hunter",
+  CHARACTERS: "characters",
+  DER: "der",
+  DER_SIT: "der_sit",
   SKELETON: "skeleton",
   MOBS: "mobs",
+  WOODEN_BG: "wooden_bg",
+  HEADER_BG: "header_bg",
   BLUE_BORDER_BROWN_BG: "blue_border_brown_bg",
   BROWN_BORDER_WHITE_BG: "brown_border_white_bg",
   BLUE_BORDER_BLUE_BG: "blue_border_blue_bg",
   BLUE_BORDER_BLUE_BG_NO_DESIGN: "blue_border_blue_bg_no_design",
   BLUE_BORDER_WHITE_BG: "blue_border_white_bg",
+  NON_SELECTED_BG: "non_selected_bg",
+  SELECTED_BG: "selected_bg",
+  MENU_BG: "menu_bg",
+  CONTENT_BG: "content_bg",
+  SWORD_ICON: "sword_icon",
+  HOME_ICON: "home_icon",
+  MAP_ICON: "map_icon",
+  SETTINGS_ICON: "settings_icon",
 };
 
 export default TEXTURE_NAMES;

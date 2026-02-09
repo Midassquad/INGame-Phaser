@@ -27,6 +27,9 @@ const config = {
       debug: false,
     },
   },
+  audio: {
+    disableWebAudio: true,
+  },
   dom: {
     createContainer: true, // This is crucial for DOM elements to display
   },

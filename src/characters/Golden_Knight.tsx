@@ -9,6 +9,7 @@ interface directions {
 }
 
 export default class Hero {
+  scene: Phaser.Scene;
   #heroSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
   #isAttacking: boolean;
@@ -21,18 +22,23 @@ export default class Hero {
   #damage: number;
 
   constructor(
-    sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
+    scene: Phaser.Scene,
+    textureName: string,
+    coords: { x: number; y: number },
     scale: number,
     defaultAnim: string,
     idleAnimations: directions,
     walkAnimations: directions,
     attackAnimations: directions,
   ) {
-    this.#heroSprite = sprite;
-    this.#heroSprite.setScale(scale).refreshBody();
-    this.#heroSprite.setCollideWorldBounds(true);
-    this.#heroSprite.setSize(30, 60);
-    this.#heroSprite.setOffset(16, 0);
+    this.scene = scene;
+    this.#heroSprite = this.scene.physics.add
+      .sprite(coords.x, coords.y, textureName)
+      .setScale(scale)
+      .refreshBody()
+      .setCollideWorldBounds(true)
+      .setSize(30, 60)
+      .setOffset(16, 0);
 
     this.#isAttacking = false;
     this.#currentDirection = "right";

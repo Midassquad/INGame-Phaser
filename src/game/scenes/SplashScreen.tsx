@@ -1,43 +1,22 @@
 import { GameObjects, Scene } from "phaser";
-import Hero from "../../characters/Hero.tsx";
 import SCENE_NAMES from "../../constants/scene_names.ts";
 import TEXTURE_NAMES from "../../constants/texture_names.ts";
 
 export class SplashScreen extends Scene {
   background: GameObjects.Image | undefined;
 
-  hero: Hero | undefined;
-  heroSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody | undefined;
-
-  isHeroNearAnEnemy: boolean;
-
-  leftKey: Phaser.Input.Keyboard.Key | undefined;
-  rightKey: Phaser.Input.Keyboard.Key | undefined;
-  upKey: Phaser.Input.Keyboard.Key | undefined;
-  downKey: Phaser.Input.Keyboard.Key | undefined;
-
-  fKey: Phaser.Input.Keyboard.Key | undefined;
-
   constructor() {
     super(SCENE_NAMES.SPLASH_SCREEN);
-
-    this.isHeroNearAnEnemy = false;
   }
 
-  setupControllerListener() {}
-
-  setupKeyboardEvents() {}
-
-  init() {
-    this.setupControllerListener();
-  }
+  init() {}
 
   create() {
     // Add background image
     const bg = this.add.image(
       this.scale.width / 2,
       this.scale.height / 2,
-      TEXTURE_NAMES.SPLASH_SCREEN_BG
+      TEXTURE_NAMES.SPLASH_SCREEN_BG,
     );
 
     // Scale background to fit the screen
@@ -50,7 +29,7 @@ export class SplashScreen extends Scene {
     const logo = this.add.image(
       this.scale.width / 2,
       this.scale.height / 3,
-      TEXTURE_NAMES.LOGO
+      TEXTURE_NAMES.LOGO,
     );
 
     // Scale logo if needed (adjust this value to make logo bigger/smaller)
@@ -79,7 +58,7 @@ export class SplashScreen extends Scene {
     this.time.delayedCall(2000, () => {
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once("camerafadeoutcomplete", () => {
-        this.scene.launch(SCENE_NAMES.LOGIN_SCREEN);
+        this.scene.start(SCENE_NAMES.LOGIN_SCREEN);
       });
     });
   }

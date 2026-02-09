@@ -7,6 +7,7 @@ import {
 } from "react";
 import StartGame from "./game/main";
 import { EventBus } from "./game/EventBus";
+import { Client } from "@stomp/stompjs";
 import SCENE_NAMES from "./constants/scene_names";
 
 export interface IRefPhaserGame {
@@ -25,8 +26,6 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
       useState<Phaser.Scene>();
 
     const [previousScene, setPreviousScene] = useState<string>("");
-
-    const [isSettingsShowing, setIsSettingsShowing] = useState<boolean>(false);
 
     useLayoutEffect(() => {
       if (game.current === null) {
@@ -63,23 +62,13 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         }
       });
 
-      EventBus.on("change-scene", (sceneName: string) => {
-        // currentSceneInstance?.scene.launch(SCENE_NAMES.NAVBAR).start(sceneName);
-        if (sceneName === SCENE_NAMES.SETTINGS) {
-          console.log("a");
-          setIsSettingsShowing(true);
-          currentSceneInstance?.scene.start(sceneName);
-        } else {
-          console.log("b");
-          setIsSettingsShowing(false);
-          if (isSettingsShowing) {
-            console.log("b.1");
-            currentSceneInstance?.scene.start(sceneName);
-          } else {
-            console.log("b.2");
-            currentSceneInstance?.scene.start(sceneName);
-          }
+      EventBus.on("change-scene", (data) => {
+        const { sceneName, gameData } = data;
+
+        if (sceneName === SCENE_NAMES.LOGIN_SCREEN) {
+          currentSceneInstance?.scene.stop(SCENE_NAMES.NAVBAR);
         }
+        currentSceneInstance?.scene.start(sceneName, gameData);
       });
 
       return () => {
@@ -87,6 +76,35 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         EventBus.removeListener("change-scene");
       };
     }, [currentActiveScene, ref, currentSceneInstance]);
+
+    const handleMessage = (body) => {
+      console.log(body);
+      const { actionObject, actionOperation, boards } = body;
+      const { cards } = boards[0];
+
+      if (actionObject === "CARD" && actionOperation === "UPDATE") {
+        EventBus.emit("quests-received", { quests: cards });
+      }
+    };
+
+    // useEffect(() => {
+    //   // Create WebSocket connection.
+    //   const socket = new WebSocket(
+    //     "ws://34.135.16.205:80/ingame-websocket",
+    //   );
+    //
+    //   // Connection opened
+    //   socket.addEventListener("open", (event) => {
+    //     socket.send("Hello Server!");
+    //   });
+    //
+    //   // Listen for messages
+    //   socket.addEventListener("message", handleMessage);
+    //
+    //   return () => {
+    //     socket.removeEventListener("message", handleMessage);
+    //   };
+    // }, []);
 
     return <div id="game-container"></div>;
   },

@@ -1,23 +1,45 @@
 import { EventBus } from "../EventBus";
 import { Animations, GameObjects, Scene } from "phaser";
 import {
-  GOLDEN_KNIGHT_KEYS,
+  CATTO_KEYS,
+  CHAR_KEYS,
+  DER_KEYS,
   RATHALOS_HUNTER_KEYS,
-  SKELETON_KEYS,
 } from "../../constants/anim_keys.ts";
-import Hero from "../../characters/Hero.tsx";
-import Skeleton from "../../characters/Skeleton.tsx";
+import Golden_Knight from "../../characters/Golden_Knight.tsx";
 import TEXTURE_NAMES from "../../constants/texture_names.ts";
-import { BottomDrawer } from "../ui/BottomDrawer.tsx";
 import SCENE_NAMES from "../../constants/scene_names.ts";
+import { AIDialogBoxDrawer } from "../ui/AIDialogBoxDrawer.tsx";
+import { TaskDetailsDrawer } from "../ui/TaskDetailsDrawer.tsx";
+import Unit from "../../characters/Unit.tsx";
+import Skeleton from "../../characters/Skeleton.tsx";
+import Pet from "../../characters/Pet.tsx";
+import Bug from "../../characters/Bug.tsx";
+import Ogre from "../../characters/Ogre.tsx";
+import Goblin from "../../characters/Goblin.tsx";
+import type { Coordinates, GameData, Quest } from "../../types/global.types.ts";
+import { coachAI } from "../../services/inGameServices.ts";
 
 export class Battle extends Scene {
+  gameW: number;
+  gameH: number;
+
   background: GameObjects.Image | undefined;
 
-  hero: Hero | undefined;
+  hero: Golden_Knight | undefined;
   heroSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody | undefined;
 
   isHeroNearAnEnemy: boolean;
+
+  quests: Quest[];
+  username: string;
+  mobsContainer: Phaser.GameObjects.Container | undefined;
+
+  selectedSprite: Unit | undefined;
+  lastSelectedMobSprite: Unit | undefined;
+
+  taskDetailsDrawer: TaskDetailsDrawer | undefined;
+  aiDialogBox: AIDialogBoxDrawer | undefined;
 
   leftKey: Phaser.Input.Keyboard.Key | undefined;
   rightKey: Phaser.Input.Keyboard.Key | undefined;
@@ -26,10 +48,26 @@ export class Battle extends Scene {
 
   fKey: Phaser.Input.Keyboard.Key | undefined;
 
+  pet: Pet | undefined;
+  hasNewMessage: boolean;
+
   constructor() {
     super(SCENE_NAMES.BATTLE);
 
     this.isHeroNearAnEnemy = false;
+    this.hasNewMessage = false;
+    this.quests = [
+      {
+        name: "",
+        description: "",
+        modelName: "",
+        trelloCardId: "",
+      },
+    ];
+
+    this.gameW = 0;
+    this.gameH = 0;
+    this.username = "";
   }
 
   setupControllerListener() {
@@ -43,6 +81,16 @@ export class Battle extends Scene {
 
     this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
       EventBus.removeListener("controls-pressed");
+    });
+  }
+
+  setupListeners() {
+    EventBus.on("quests-received", (gameData: GameData) => {
+      this.onReceivedQuests(gameData);
+    });
+
+    this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
+      EventBus.removeListener("quests-received");
     });
   }
 
@@ -67,144 +115,199 @@ export class Battle extends Scene {
     this.fKey?.on("down", () => this.hero?.attack());
   }
 
-  init() {
+  init(gameData: GameData) {
+    const { quests, username } = gameData;
+    this.quests = quests;
+    this.username = username;
     this.setupControllerListener();
+    this.setupListeners();
   }
 
   create() {
-    const gameW = this.scale.width;
-    const gameH = this.scale.height;
+    this.gameW = this.scale.width;
+    this.gameH = this.scale.height;
 
     this.background = this.add.image(0, 0, "background");
     this.background.setPosition(0, 0);
     this.background.setOrigin(0, 0);
     // this.background.setDisplaySize(gameH, gameH);
-
-    this.hero = new Hero(
-      this.physics.add.sprite(
-        gameW / 2.7,
-        gameH / 1.7,
-        TEXTURE_NAMES.GOLDEN_KNIGHT,
-      ),
-      2,
-      GOLDEN_KNIGHT_KEYS.SLASH_RIGHT,
-      {
-        up: GOLDEN_KNIGHT_KEYS.IDLE_UP,
-        down: GOLDEN_KNIGHT_KEYS.IDLE_DOWN,
-        left: GOLDEN_KNIGHT_KEYS.IDLE_LEFT,
-        right: GOLDEN_KNIGHT_KEYS.IDLE_RIGHT,
-      },
-      {
-        up: GOLDEN_KNIGHT_KEYS.WALK_UP,
-        down: GOLDEN_KNIGHT_KEYS.WALK_DOWN,
-        left: GOLDEN_KNIGHT_KEYS.WALK_LEFT,
-        right: GOLDEN_KNIGHT_KEYS.WALK_RIGHT,
-      },
-      {
-        up: GOLDEN_KNIGHT_KEYS.SLASH_UP,
-        down: GOLDEN_KNIGHT_KEYS.SLASH_DOWN,
-        left: GOLDEN_KNIGHT_KEYS.SLASH_LEFT,
-        right: GOLDEN_KNIGHT_KEYS.SLASH_RIGHT,
-      },
-    );
-
+    //
+    // this.hero = new Golden_Knight(
+    //   this,
+    //   TEXTURE_NAMES.GOLDEN_KNIGHT,
+    //   {
+    //     x: gameW / 2.7,
+    //     y: gameH / 1.7,
+    //   },
+    //   2,
+    //   GOLDEN_KNIGHT_KEYS.SLASH_RIGHT,
+    //   {
+    //     up: GOLDEN_KNIGHT_KEYS.IDLE_UP,
+    //     down: GOLDEN_KNIGHT_KEYS.IDLE_DOWN,
+    //     left: GOLDEN_KNIGHT_KEYS.IDLE_LEFT,
+    //     right: GOLDEN_KNIGHT_KEYS.IDLE_RIGHT,
+    //   },
+    //   {
+    //     up: GOLDEN_KNIGHT_KEYS.WALK_UP,
+    //     down: GOLDEN_KNIGHT_KEYS.WALK_DOWN,
+    //     left: GOLDEN_KNIGHT_KEYS.WALK_LEFT,
+    //     right: GOLDEN_KNIGHT_KEYS.WALK_RIGHT,
+    //   },
+    //   {
+    //     up: GOLDEN_KNIGHT_KEYS.SLASH_UP,
+    //     down: GOLDEN_KNIGHT_KEYS.SLASH_DOWN,
+    //     left: GOLDEN_KNIGHT_KEYS.SLASH_LEFT,
+    //     right: GOLDEN_KNIGHT_KEYS.SLASH_RIGHT,
+    //   },
+    // );
+    //
+    //
+    //
+    // this.physics.add
+    //   .sprite(this.gameW / 2.5, this.gameH / 2.7, TEXTURE_NAMES.CHARACTERS)
+    //   .setScale(2)
+    //   .play(CHAR_KEYS.DK.ATTACK);
+    //
+    // this.physics.add
+    //   .sprite(this.gameW / 2.5, this.gameH / 2.5, TEXTURE_NAMES.CHARACTERS)
+    //   .setScale(2)
+    //   .play(CHAR_KEYS.CIRI.ATTACK);
+    //
     this.physics.add
-      .sprite(gameW / 2.5, gameH / 2.2, TEXTURE_NAMES.RATHALOS_HUNTER)
-      .setScale(2)
-      .play(RATHALOS_HUNTER_KEYS.IDLE);
+      .sprite(this.gameW / 2.5, this.gameH / 2.1, TEXTURE_NAMES.DER)
+      .setScale(1.1)
+      .play(DER_KEYS.ATTACK);
 
-    this.physics.add
-      .sprite(gameW / 2.5, gameH / 2.7, TEXTURE_NAMES.RATHALOS_HUNTER)
-      .setScale(2)
-      .play(RATHALOS_HUNTER_KEYS.WALK);
+    // this.physics.add
+    //   .sprite(this.gameW / 2.5, this.gameH / 1.8, TEXTURE_NAMES.CHARACTERS)
+    //   .setScale(2)
+    //   .play(CHAR_KEYS.JEAN.ATTACK);
+    //
+    // this.physics.add
+    //   .sprite(this.gameW / 2.5, this.gameH / 1.6, TEXTURE_NAMES.CHARACTERS)
+    //   .setScale(2)
+    //   .play(CHAR_KEYS.GAREN.ATTACK);
+    //
+    // this.physics.add
+    //   .sprite(this.gameW / 3, this.gameH / 1.5, TEXTURE_NAMES.RATHALOS_HUNTER)
+    //   .setScale(2)
+    //   .play(RATHALOS_HUNTER_KEYS.SLASH);
 
-    this.physics.add
-      .sprite(gameW / 2.5, gameH / 3.9, TEXTURE_NAMES.RATHALOS_HUNTER)
-      .setScale(2)
-      .play(RATHALOS_HUNTER_KEYS.SLASH);
+    this.pet = new Pet(this, 0.7, { x: this.gameW / 4, y: this.gameH / 1.9 });
 
-    this.setupKeyboardEvents();
+    const petSprite = this.pet.getSprite();
 
-    const mobsContainer = this.add.container(gameW / 1.8, gameH / 2.7);
+    petSprite.on("pointerdown", async () => {
+      this.selectedSprite?.unTarget();
+      if (this.hasNewMessage) {
+        this.hasNewMessage = false;
+        petSprite?.play(CATTO_KEYS.IDLE);
+      }
+      if (this.taskDetailsDrawer?.isShowing) {
+        const response = await coachAI(this.username);
+        this.aiDialogBox?.setMessage(`\n${response}`).reAdjustSpacing();
 
-    mobsContainer.add(
-      new Skeleton(
-        this.physics.add.sprite(0, 0, TEXTURE_NAMES.SKELETON),
-        2,
-        SKELETON_KEYS.SHOOT_LEFT,
-      ).getSprite(),
-    );
+        this.taskDetailsDrawer?.hideDrawer();
+        this.aiDialogBox?.showDrawer();
 
-    mobsContainer.add(
-      new Skeleton(
-        this.physics.add.sprite(0, 0, TEXTURE_NAMES.SKELETON),
-        2,
-        SKELETON_KEYS.SHOOT_LEFT,
-      ).getSprite(),
-    );
-
-    mobsContainer.add(
-      new Skeleton(
-        this.physics.add.sprite(0, 0, TEXTURE_NAMES.SKELETON),
-        2,
-        SKELETON_KEYS.WALK_LEFT,
-      ).getSprite(),
-    );
-
-    mobsContainer.add(
-      new Skeleton(
-        this.physics.add.sprite(0, 0, TEXTURE_NAMES.SKELETON),
-        2,
-        SKELETON_KEYS.WALK_LEFT,
-      ).getSprite(),
-    );
-
-    mobsContainer.add(
-      new Skeleton(
-        this.physics.add.sprite(0, 0, TEXTURE_NAMES.SKELETON),
-        2,
-        SKELETON_KEYS.SHOOT_LEFT,
-      ).getSprite(),
-    );
-
-    Phaser.Actions.GridAlign(mobsContainer.list, {
-      width: 3,
-      height: 3,
-      cellWidth: 32 + 50,
-      cellHeight: 32 + 80,
-      x: 0,
-      y: 0,
+        this.pet?.target();
+        this.selectedSprite = this.pet;
+      } else {
+        // this.lastSelectedMobSprite?.target();
+        // this.selectedSprite = this.lastSelectedMobSprite;
+        // this.taskDetailsDrawer?.showDrawer();
+        // this.aiDialogBox?.hideDrawer();
+      }
     });
 
-    // new Skeleton(
-    //   this.physics.add.sprite(gameW / 1.2, gameH / 2.2, TEXTURE_NAMES.SKELETON),
-    //   2,
-    //   SKELETON_KEYS.SHOOT_LEFT,
-    // );
-    //
-    // new Skeleton(
-    //   this.physics.add.sprite(gameW / 1.6, gameH / 2.2, TEXTURE_NAMES.SKELETON),
-    //   2,
-    //   SKELETON_KEYS.WALK_LEFT,
-    // );
-    //
-    // new Skeleton(
-    //   this.physics.add.sprite(gameW / 1.4, gameH / 2.6, TEXTURE_NAMES.SKELETON),
-    //   2,
-    //   SKELETON_KEYS.WALK_LEFT,
-    // );
+    // this.setupKeyboardEvents();
 
-    // this.heroSprite.on(
-    //   Phaser.Animations.Events.ANIMATION_REPEAT,
-    //   (e: Animations.Animation) => this.onHit(e, damage, attackKey),
-    // );
+    this.taskDetailsDrawer = new TaskDetailsDrawer(this, 50, 25, {
+      title: this.quests![0].name,
+      description: this.quests![0].description,
+    });
+
+    this.taskDetailsDrawer.init(true);
+
+    this.aiDialogBox = new AIDialogBoxDrawer(
+      this,
+      25,
+      25,
+      "Hello! Hope you're having a good day!\n\nLet's go beat this quests!!",
+    );
+    this.aiDialogBox.init(false);
+
+    // // simulate new task update
+    // this.input.keyboard?.addKey("U").on("down", () => {
+    //   this.reSpawnMobs();
+    //   // this.taskDetailsDrawer
+    //   //   ?.setTitle("New Title")
+    //   //   .setDescription(
+    //   //     "New description for this task\n\nVestibulum tortor felis, facilisis at iaculis commodo, dapibus et libero.\n\nNullam sit amet hendrerit erat, eu dapibus orci.",
+    //   //   );
+    //   //
+    //   // this.taskDetailsDrawer?.reAdjustSpacing();
     //
+    //   this.hasNewMessage = true;
+    //   this.pet?.getSprite()?.play(CATTO_KEYS.JUMP);
+    //   // set cattoAlert play to Jumping
+    //   this.aiDialogBox
+    //     ?.setMessage("Message has been updated.\n\nAnother line for testing...")
+    //     .reAdjustSpacing();
+    // });
 
-    const bottomDrawer = new BottomDrawer(this);
+    // new Skeleton(this, 2, { x: 360, y: gameH / 2 });
+    // new Ogre(this, 2, { x: 370, y: gameH / 2 }).getSprite().setSize(64, 64);
 
-    bottomDrawer.init();
+    this.spawnMobs(this.quests);
 
     EventBus.emit("current-scene-ready", this);
+  }
+
+  scriptForChatbox() {
+    const chatBox = document.getElementById("chatBox");
+    const messageInput = document.getElementById(
+      "messageInput",
+    ) as HTMLInputElement;
+    const form = document.getElementById("messageForm");
+
+    form!.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const message = messageInput.value;
+
+      if (!message) return;
+
+      const parentElement = document.getElementById("chatBox");
+
+      const outerChatCont = document.createElement("div");
+      outerChatCont.className = "user chat-outercont";
+
+      const chatCont = document.createElement("div");
+      chatCont.className = "chat-container";
+
+      const chatThumb = document.createElement("div");
+      chatThumb.className = "chat-thumb";
+
+      const chatOuterMsg = document.createElement("div");
+      chatOuterMsg.className = "chat-outer-msg";
+
+      const chatMsg = document.createElement("div");
+      chatMsg.className = "chat-msg";
+
+      const newElement = document.createElement("p");
+      newElement.textContent = message;
+
+      chatMsg.append(newElement);
+      chatOuterMsg.append(chatMsg);
+      chatCont.append(chatThumb, chatOuterMsg);
+      outerChatCont.append(chatCont);
+      parentElement!.append(outerChatCont);
+
+      messageInput.value = "";
+
+      chatBox!.scrollTop = chatBox!.scrollHeight - chatBox!.clientHeight;
+    });
   }
 
   onHit(e: Animations.Animation, damage: number, attackKey: string) {
@@ -215,6 +318,138 @@ export class Battle extends Scene {
         console.log("MISS!");
       }
     }
+  }
+
+  spawnMobs(quests: Quest[]): Phaser.GameObjects.Container | undefined {
+    this.mobsContainer = this.add.container(this.gameW / 1.7, this.gameH / 2.5);
+
+    // generate coords
+    let generatedCoords: Coordinates[] = [];
+
+    // max 12 sprites
+    // max 4 on
+    // max 3 on y
+    // we set it to 96 since if we use 64, some sprites overlap
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        generatedCoords = [
+          ...generatedCoords,
+          {
+            x: i * 96,
+            y: j * 96,
+          },
+        ];
+      }
+    }
+
+    let coordsWithIndex: { index: number; coords: Coordinates }[] = [];
+    let mobSprites:
+      | Phaser.Physics.Arcade.Sprite[]
+      | Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[] = [];
+
+    for (let i = 0; i < quests.length; i++) {
+      let mob;
+
+      if (i === 0) {
+        // 0x96
+        // if first, highlight the first mob,
+        // select the 0x96 c, coordsoords which is right next to the hero
+        mob = this.setMob(quests[i].modelName, generatedCoords[1]);
+        generatedCoords.splice(1, 1);
+        mob.target();
+        this.selectedSprite = mob;
+        coordsWithIndex = [
+          ...coordsWithIndex,
+          {
+            index: i,
+            coords: generatedCoords[1],
+          },
+        ];
+      } else {
+        const randomIndex = Math.floor(Math.random() * generatedCoords.length);
+        const selectedCoords = generatedCoords[randomIndex];
+        mob = this.setMob(quests[i].modelName, selectedCoords);
+        generatedCoords.splice(randomIndex, 1);
+
+        coordsWithIndex = [
+          ...coordsWithIndex,
+          {
+            index: i,
+            coords: selectedCoords,
+          },
+        ];
+      }
+
+      const mobSprite = mob.getSprite();
+
+      mobSprite.on("pointerdown", () => this.onSelectMob(mob, quests[i]));
+
+      // mobsContainer.add(mobSprite);
+      mobSprites = [...mobSprites, mobSprite];
+    }
+
+    // rearrange the depth of each mobsprite
+    coordsWithIndex.sort((a, b) => {
+      if (a.coords.y < b.coords.y) {
+        return -1;
+      } else if (a.coords.y === b.coords.y) {
+        return 0;
+      } else {
+        return 1;
+      }
+    });
+
+    for (const c of coordsWithIndex) {
+      const { index } = c;
+      this.mobsContainer?.add(mobSprites[index]);
+    }
+    return this.mobsContainer;
+  }
+
+  reSpawnMobs() {
+    this.mobsContainer?.destroy();
+    this.spawnMobs(this.quests);
+  }
+
+  setMob(mob: string, coords: Coordinates) {
+    switch (mob) {
+      case "goblin":
+        return new Goblin(this, 2, coords);
+      case "ogre":
+        return new Ogre(this, 2.5, coords);
+
+      case "bug":
+        return new Bug(this, 2, coords);
+      default:
+        return new Skeleton(this, 2, coords);
+    }
+  }
+
+  onSelectMob(mob: Unit, quest: Quest) {
+    this.selectedSprite?.unTarget();
+    this.selectedSprite = mob;
+    this.lastSelectedMobSprite = mob;
+    mob.target(); // set tint
+    this.taskDetailsDrawer
+      ?.setTitle(quest.name)
+      .setDescription(quest.description);
+
+    this.taskDetailsDrawer?.reAdjustSpacing();
+
+    if (this.aiDialogBox?.isShowing) {
+      this.aiDialogBox?.hideDrawer();
+      this.taskDetailsDrawer?.showDrawer();
+    }
+  }
+
+  onReceivedQuests(gameData: GameData) {
+    this.quests = gameData.quests;
+    this.reSpawnMobs();
+    this.taskDetailsDrawer
+      ?.setTitle(this.quests[0].name)
+      .setDescription(this.quests[0].description);
+
+    this.taskDetailsDrawer?.reAdjustSpacing();
   }
 
   update() {

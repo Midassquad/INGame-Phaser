@@ -1,52 +1,21 @@
 import { SKELETON_KEYS } from "../constants/anim_keys";
+import TEXTURE_NAMES from "../constants/texture_names";
+import type { Coordinates } from "../types/global.types";
+import Unit from "./Unit";
 
-export default class Skeleton {
-  #skeletonSprite: Phaser.Physics.Arcade.Sprite;
-  #scale: number;
-  #defaultAnimation: string;
-
+export default class Skeleton extends Unit {
   constructor(
-    sprite: Phaser.Physics.Arcade.Sprite,
+    scene: Phaser.Scene,
     scale: number,
-    defaultAnimation: string,
+    coords: Coordinates,
+    defaultAnimation?: string,
   ) {
-    this.#skeletonSprite = sprite;
-    this.#scale = scale;
-    this.#defaultAnimation = defaultAnimation;
-
-    this.#init();
-  }
-
-  #init() {
-    this.#skeletonSprite.setScale(this.#scale);
-    this.#skeletonSprite.play(this.#defaultAnimation);
-  }
-
-  shoot(direction: string) {
-    let animKey = SKELETON_KEYS.SHOOT_DOWN;
-    switch (direction) {
-      case "up":
-        animKey = SKELETON_KEYS.SHOOT_UP;
-        break;
-
-      case "down":
-        animKey = SKELETON_KEYS.SHOOT_DOWN;
-        break;
-
-      case "left":
-        animKey = SKELETON_KEYS.SHOOT_LEFT;
-        break;
-
-      case "right":
-        animKey = SKELETON_KEYS.SHOOT_RIGHT;
-        break;
-      default:
-        break;
-    }
-    this.#skeletonSprite.play(animKey);
-  }
-
-  getSprite(): Phaser.Physics.Arcade.Sprite {
-    return this.#skeletonSprite;
+    super(
+      scene,
+      TEXTURE_NAMES.SKELETON,
+      scale,
+      coords,
+      defaultAnimation ?? SKELETON_KEYS.SHOOT_LEFT,
+    );
   }
 }

@@ -10,7 +10,16 @@ import { LoginScreen } from "./scenes/LoginScreen";
 
 const config = {
   type: Phaser.AUTO,
-  scene: [Boot, Preloader, SplashScreen, LoginScreen, Battle, CharacterDetails, Settings, Navbar],
+  scene: [
+    Boot,
+    Preloader,
+    SplashScreen,
+    LoginScreen,
+    Battle,
+    CharacterDetails,
+    Settings,
+    Navbar,
+  ],
   physics: {
     default: "arcade",
     arcade: {
@@ -18,10 +27,17 @@ const config = {
       debug: false,
     },
   },
+  audio: {
+    disableWebAudio: true,
+  },
+  dom: {
+    createContainer: true, // This is crucial for DOM elements to display
+  },
   scale: {
     mode: Phaser.Scale.FIT,
     width: 720,
     height: 1280,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
     // width: window.innerWidth,
     // height: window.innerHeight,
     // max: {

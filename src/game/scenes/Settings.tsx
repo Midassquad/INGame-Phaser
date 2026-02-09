@@ -12,10 +12,8 @@ export class Settings extends Scene {
     const gameW = this.scale.width;
     const gameH = this.scale.height;
 
-    const navbarHeight = this.scale.height * 0.18;
-
     const containerSettings = this.add
-      .container(gameW / 2, navbarHeight - 50 - gameH)
+      .container(gameW / 2, 50 - gameH)
       .setAlpha(0);
 
     const bgModal = this.add
@@ -25,7 +23,7 @@ export class Settings extends Scene {
         TEXTURE_NAMES.BLUE_BORDER_BLUE_BG_NO_DESIGN,
         0,
         (gameW - 30) / 3,
-        (gameH - navbarHeight - 120) / 3,
+        (gameH - 120) / 3,
         14,
         14,
         14,
@@ -57,7 +55,7 @@ export class Settings extends Scene {
       repeatDelay: 2000,
       duration: 200,
       alpha: 1,
-      y: navbarHeight + 50,
+      y: 50,
       // onComplete: () => (this.#isShowing = true),
     });
 

@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import terrainBg from "../../../assets/terrain_720x1280.jpg";
+import terrainBg from "../../../assets/golden_crystal_forest.png";
 import SCENE_NAMES from "../../constants/scene_names";
 
 export class Boot extends Scene {

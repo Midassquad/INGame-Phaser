@@ -1,0 +1,102 @@
+@font-face {
+  font-family: "PixelifySans";
+  src: url("../../fonts/PixelifySans-VariableFont_wght.ttf") format("truetype");
+}
+
+.outer-container {
+  width: 680px;
+  /* This here is what actually make the tiling happen */
+  border-image: url("../../ui/tile_0005.png");
+  border-image-slice: 15 fill;
+  border-image-width: 40px;
+  border-image-repeat: repeat;
+  padding: 30px;
+  box-sizing: border-box;
+}
+#chatBox {
+  width: 100%;
+  height: 680px;
+  display: block;
+  overflow-y: scroll;
+}
+
+.chat-outercont {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.chat-outercont.user {
+  justify-content: end;
+}
+
+.chat-outercont.user .chat-container {
+  flex-flow: row-reverse;
+}
+
+.chat-container {
+  box-sizing: border-box;
+  max-width: 80%;
+  display: flex;
+  gap: 8px;
+}
+
+.chat-container p {
+  font-family: "PixelifySans";
+  font-size: 22px;
+  color: #a3703a;
+  margin: 0;
+}
+
+.chat-container .chat-thumb {
+  min-width: 50px;
+  height: 50px;
+  background-color: #fff1d3;
+  flex-basis: 50px;
+  border-radius: 50%;
+}
+
+.chat-container .chat-msg {
+  box-sizing: border-box;
+  padding: 16px 20px;
+
+  border-image: url("../../ui/tile_0000.png");
+  border-image-slice: 15 fill;
+  border-image-width: 30px;
+  border-image-repeat: repeat;
+}
+
+#chatControls {
+  box-sizing: border-box;
+}
+
+#messageForm {
+  display: flex;
+  gap: 10px;
+}
+
+#messageForm input {
+  flex-basis: 80%;
+  border: 0;
+  background-color: #fff1d3;
+  border: 3px solid #6d4b27;
+  font-size: 22px;
+  color: #a3703a;
+  font-family: "PixelifySans";
+  padding: 10px;
+}
+#messageForm input:focus {
+  outline: 0;
+}
+
+#messageForm button {
+  flex-basis: 20%;
+  background-color: transparent;
+  border-image: url("../../ui/tile_0015.png");
+  border-image-slice: 15 fill;
+  border-image-width: 30px;
+  border-image-repeat: repeat;
+  cursor: pointer;
+  color: #515f6b;
+  font-family: "PixelifySans";
+  font-size: 22px;
+}

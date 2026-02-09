@@ -2,8 +2,6 @@ import "./App.css";
 import { PhaserGame } from "./PhaserGame";
 import type { IRefPhaserGame } from "./PhaserGame";
 import { useRef, useState } from "react";
-import Controllers from "./ui/Controllers";
-import { EventBus } from "./game/EventBus";
 import AppContainer from "./Container";
 import Header from "./ui/Header";
 import Settings from "./ui/Settings";
@@ -39,7 +37,6 @@ function App() {
         <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
         {/* <Header onChangeTab={onChangeTabHandler} /> */}
         {/* <Footer currentTab={currentTab} /> */}
-        {/* <Settings currentTab={currentTab} /> */}
       </AppContainer>
     </>
   );

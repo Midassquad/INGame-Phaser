@@ -6,8 +6,9 @@ const WS_SUB_URL = "/topic/greetings";
 
 const getTasks = async (username: string) => {
   try {
+    const boardId = import.meta.env.VITE_BOARD_ID;
     const response = await fetch(
-      `${location.hostname === "localhost" ? "http" : "https"}://${BASE_URL}/api/initdata?username=${username}&boardId=697316f0b7593088c7655a28`,
+      `${location.hostname === "localhost" ? "http" : "https"}://${BASE_URL}/api/initdata?username=${username}&boardId=${boardId}`,
     );
 
     // Error handling for bad HTTP statuses (e.g., 404 Not Found, 500 Server Error)
